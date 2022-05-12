@@ -1,32 +1,54 @@
 <template>
-  <div id="app">
-    <nav>
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
-    </nav>
-    <router-view />
-  </div>
+  <v-app>
+    <v-main>
+      <TopBar />
+      <v-content>
+        <side-bar />
+        <router-view />
+      </v-content>
+    </v-main>
+  </v-app>
 </template>
 
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
+<script>
+import SideBar from './components/SideBar.vue';
+import TopBar from './components/TopBar.vue';
 
-nav {
-  padding: 30px;
-}
 
-nav a {
-  font-weight: bold;
-  color: #2c3e50;
-}
+export default {
+  components: {
+    TopBar,
+    SideBar,
+  },
 
-nav a.router-link-exact-active {
-  color: #42b983;
+  name: 'App',
+
+  data: () => ({
+    authenticated: false,
+    mockAccount: {
+      username: "nraboy",
+      password: "password"
+    },
+
+    mounted() {
+      if(!this.authenticated) {
+        this.$router.replace({ name: "login" });
+      }
+    },
+    methods: {
+      setAuthenticated(status) {
+        this.authenticated = status;
+      },
+      logout() {
+        this.authenticated = false;
+      }
+    }
+
+  }),
+};
+</script>
+<style scoped>
+ul {
+  padding-left: 0;
 }
 </style>
