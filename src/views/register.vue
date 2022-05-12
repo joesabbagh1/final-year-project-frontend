@@ -91,6 +91,7 @@
               >
                 <v-btn
                   color="white"
+                  @click="cancel()"
                 >
                   cancel
                 </v-btn>
@@ -141,7 +142,10 @@ export default {
 
     methods: {
       register(){
-        this.$router.go('/login')
+        this.$router.push('/login')
+      },
+      cancel(){
+        this.$router.push('/login')
       }
     },
 
