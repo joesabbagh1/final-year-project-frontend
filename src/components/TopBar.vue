@@ -23,7 +23,8 @@ export default {
   methods:{
     logout(){
       this.$emit("authenticated", false);
-      this.$router.go('/')
+      this.$router.push('/login')
+      window.location.reload();
     }
   }
 

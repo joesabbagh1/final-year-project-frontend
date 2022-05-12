@@ -33,9 +33,9 @@ export default {
     }
   },
   mounted() {
-    if(!this.authenticated) {
-      this.$router.replace({ name: "login" });
-    }
+    // if(!this.authenticated) {
+    //   this.$router.replace({ name: "login" });
+    // }
   },
   methods: {
     setAuthenticated(status) {

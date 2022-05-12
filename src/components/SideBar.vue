@@ -8,19 +8,8 @@
       class="logo-details"
       style="margin: 6px 14px 0 14px;"
     >
-      <img
-        v-if="menuLogo"
-        :src="menuLogo"
-        alt="menu-logo"
-        class="menu-logo icon"
-      >
-      <i
-        v-else
-        class="bx icon"
-        :class="menuIcon"
-      />
-      <div class="logo_name">
-        {{ menuTitle }}
+      <div class="logo_name pl-2">
+        Salesforce
       </div>
       <i
         class="bx"

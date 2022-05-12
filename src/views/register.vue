@@ -4,7 +4,7 @@
       <v-col cols="4" class="white rounded-lg">
         <v-form v-model="valid">
           <v-container fluid>
-            <v-row>
+            <v-row justify="center">
               <v-col
                 cols="12"
                 class="pb-0"
@@ -18,6 +18,22 @@
                   v-model="input.username"
                   :rules="nameRules"
                   :counter="15"
+                  required
+                ></v-text-field>
+              </v-col>
+
+              <v-col
+                cols="12"
+                class="py-0"
+              >
+                <div class="pb-1">
+                  Email
+                </div>
+                <v-text-field
+                  dense
+                  solo
+                  v-model="input.email"
+                  :rules="emailRules"
                   required
                 ></v-text-field>
               </v-col>
@@ -50,6 +66,7 @@
                   dense
                   solo
                   v-model="input.comfirmPassword"
+                  :rules="confirmPasswordRules.concat(passwordConfirmationRule)"
                   type="password"
                   required
                 ></v-text-field>
@@ -57,14 +74,25 @@
               
               <v-col
                 align="center"
-                cols="12"
+                cols="5"
               >
                 <v-btn
-                  block
+                  :disabled="!valid"
                   color="blue"
                   class="white--text"
+                  @click="register()"
                 >
                   register
+                </v-btn>
+              </v-col>
+              <v-col
+                align="center"
+                cols="5"
+              >
+                <v-btn
+                  color="white"
+                >
+                  cancel
                 </v-btn>
               </v-col>
             </v-row>
@@ -76,6 +104,7 @@
 </template>
 
 <script>
+import router from '@/router'
 export default {
   
   name: 'Login',
@@ -85,31 +114,41 @@ export default {
   data: () => ({
       valid: false,
       input: {
-        username: "",
-        password: ""
+        username: '',
+        email: '',
+        password: '',
+        comfirmPassword: '',
       },
       nameRules: [
         v => !!v || 'Username is required',
         v => v.length <= 15 || 'Username must be less than 15 characters',
       ],
+      emailRules: [
+        v => !!v || 'Email is required',
+        value => {
+          const pattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+          return pattern.test(value) || 'Invalid e-mail.'
+        },
+      ],
       passwordRules: [
         v => !!v || 'Password is required',
+      ],
+      confirmPasswordRules: [
+        v => !!v || "Password is required"
       ],
       checkbox: false,
     }),
 
     methods: {
-      login() {
-        if(this.input.username != "" && this.input.password != "") {
-            if(this.input.username == this.user.username && this.input.password == this.user.password) {
-                this.$emit("authenticated", true);
-                this.$router.replace({ name: "home" });
-            } else {
-                console.log("The username and / or password is incorrect");
-            }
-        } else {
-            console.log("A username and password must be present");
-        }
+      register(){
+        this.$router.go('/login')
+      }
+    },
+
+    computed: {
+      passwordConfirmationRule() {
+        return () =>
+          this.input.password === this.input.comfirmPassword || "Password must match"
       }
     }
 }
