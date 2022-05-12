@@ -1,11 +1,14 @@
 <template>
   <v-app>
     <v-main>
-      <TopBar />
-      <v-content>
-        <side-bar />
-        <router-view />
-      </v-content>
+      <template v-if="authenticated">
+        <TopBar />
+        <SideBar />
+      </template>
+      <div>
+        <router-link v-if="authenticated" to="/" v-on:click.native="logout()">Log out</router-link>
+      </div>
+      <router-view :user="mockAccount" @authenticated="setAuthenticated" />
     </v-main>
   </v-app>
 </template>
@@ -16,39 +19,38 @@ import TopBar from './components/TopBar.vue';
 
 
 export default {
-  components: {
-    TopBar,
-    SideBar,
-  },
-
   name: 'App',
 
-  data: () => ({
-    authenticated: false,
-    mockAccount: {
-      username: "nraboy",
-      password: "password"
-    },
+  components:{
+    SideBar,
+    TopBar
+  },
 
-    mounted() {
-      if(!this.authenticated) {
-        this.$router.replace({ name: "login" });
-      }
-    },
-    methods: {
-      setAuthenticated(status) {
-        this.authenticated = status;
-      },
-      logout() {
-        this.authenticated = false;
+  data() {
+    return {
+      authenticated: false,
+      mockAccount: {
+        username: "1",
+        password: "1"
       }
     }
-
-  }),
+  },
+  mounted() {
+    if(!this.authenticated) {
+      this.$router.replace({ name: "login" });
+    }
+  },
+  methods: {
+    setAuthenticated(status) {
+      this.authenticated = status;
+      console.log(this.authenticated)
+    },
+    logout() {
+      this.authenticated = false;
+      console.log(this.authenticated)
+    }
+  }
 };
 </script>
 <style scoped>
-ul {
-  padding-left: 0;
-}
 </style>
