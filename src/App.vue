@@ -2,12 +2,9 @@
   <v-app>
     <v-main>
       <template v-if="authenticated">
-        <TopBar />
+        <TopBar @authenticated="setAuthenticated" />
         <SideBar />
       </template>
-      <div>
-        <router-link v-if="authenticated" to="/" v-on:click.native="logout()">Log out</router-link>
-      </div>
       <router-view :user="mockAccount" @authenticated="setAuthenticated" />
     </v-main>
   </v-app>
