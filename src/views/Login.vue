@@ -67,6 +67,7 @@
                   block
                   color="blue"
                   class="white--text"
+                  @click="register()"
                 >
                   register
                 </v-btn>
@@ -114,6 +115,10 @@ export default {
         } else {
             console.log("A username and password must be present");
         }
+      },
+
+      register(){
+        this.$router.push('/register')
       }
     }
 }
