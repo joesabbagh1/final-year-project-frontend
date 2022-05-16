@@ -77,6 +77,7 @@
                 cols="5"
               >
                 <v-btn
+                  block
                   :disabled="!valid"
                   color="blue"
                   class="white--text"
@@ -90,6 +91,7 @@
                 cols="5"
               >
                 <v-btn
+                  block
                   color="white"
                   @click="cancel()"
                 >
