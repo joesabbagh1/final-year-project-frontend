@@ -2,7 +2,7 @@
   <v-container fluid class="grey lighten-3">
     <v-row justify="center" align="center" style="height:100vh">
       <v-col cols="4" class="white rounded-lg">
-        <v-form v-model="valid">
+        <v-form v-model="valid" v-if="!authenticated">
           <v-container fluid>
             <v-row>
               <v-col
@@ -75,6 +75,30 @@
             </v-row>
           </v-container>
         </v-form>
+        <template v-else>
+          <div class="pa-2 text-center">
+            <div class="text-h5 font-weight-medium text-center text-uppercase py-3">
+              welcome {{input.username}}
+            </div>
+            <div class="text-body-1 text-center text- py-2">
+              Please select the company you want to access
+            </div>
+            <v-select
+              :items="input.companies"
+              dense
+              solo
+            >
+            </v-select>
+            <v-btn
+              block
+              color="blue"
+              class="white--text"
+              @click="companiesLogin()"
+            >
+              continue
+            </v-btn>
+          </div>
+        </template>
       </v-col>
     </v-row>
   </v-container>
@@ -85,13 +109,15 @@ export default {
   
   name: 'Login',
   
-  props:['user'],
+  props:['users'],
 
   data: () => ({
+      authenticated: false,
       valid: false,
       input: {
         username: "",
-        password: ""
+        password: "",
+        companies:[],
       },
       nameRules: [
         v => !!v || 'Username is required',
@@ -106,15 +132,23 @@ export default {
     methods: {
       login() {
         if(this.input.username != "" && this.input.password != "") {
-            if(this.input.username == this.user.username && this.input.password == this.user.password) {
-                this.$emit("authenticated", true);
-                this.$router.replace({ name: "home" });
-            } else {
-                console.log("The username and / or password is incorrect");
-            }
+            this.users.some(user => {
+              if(user.username === this.input.username && user.password === this.input.password){
+                this.authenticated = true;
+                this.input.companies = user.companies
+              }
+              else{
+                console.log("wrong username or password");
+              }
+            }) 
         } else {
-            console.log("A username and password must be present");
+          console.log("A username and password must be present");
         }
+      },
+
+      companiesLogin(){
+        this.$emit("authenticated", true);
+        this.$router.replace({ name: "home" });
       },
 
       register(){

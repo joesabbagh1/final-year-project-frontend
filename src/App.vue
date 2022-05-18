@@ -5,7 +5,7 @@
         <TopBar @authenticated="setAuthenticated" />
         <SideBar />
       </template>
-      <router-view :user="mockAccount" @authenticated="setAuthenticated" />
+      <router-view :users="mockAccounts" @authenticated="setAuthenticated" />
     </v-main>
   </v-app>
 </template>
@@ -26,16 +26,38 @@ export default {
   data() {
     return {
       authenticated: false,
-      mockAccount: {
-        username: "1",
-        password: "1"
+      mockAccounts: [
+      {
+        username: "joe",
+        password: "1",
+        companies: [
+          'fattal',
+          'google',
+          'facebook',
+        ]
+      },
+      {
+        username: "elie",
+        password: "2",
+        companies: [
+          'amazon',
+          'murex',
+        ]
+      },
+      {
+        username: "3",
+        password: "3",
+        companies: [
+          'fattal',
+        ]
       }
+    ],
     }
   },
   mounted() {
-    // if(!this.authenticated) {
-    //   this.$router.replace({ name: "login" });
-    // }
+    if(!this.authenticated) {
+      this.$router.replace({ name: "login" });
+    }
   },
   methods: {
     setAuthenticated(status) {
