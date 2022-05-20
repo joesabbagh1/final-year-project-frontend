@@ -105,13 +105,13 @@
 </template>
 
 <script>
+import axios from 'axios';
 export default {
   
   name: 'Login',
-  
-  props:['users'],
 
   data: () => ({
+      API_URL: 'http://localhost:5290/api/',
       authenticated: false,
       valid: false,
       input: {
@@ -127,18 +127,23 @@ export default {
         v => !!v || 'Password is required',
       ],
       checkbox: false,
+      users:[],
     }),
 
     methods: {
+      refreshData(){
+        axios.get("http://localhost:5290/api/users")
+        .then((Response)=>{
+          this.users=Response.data;
+          console.log(this.users);
+        });
+      },
+
       login() {
         if(this.input.username != "" && this.input.password != "") {
             this.users.some(user => {
-              if(user.username === this.input.username && user.password === this.input.password){
+              if(user.userName === this.input.username && user.password === this.input.password){
                 this.authenticated = true;
-                this.input.companies = user.companies
-              }
-              else{
-                console.log("wrong username or password");
               }
             }) 
         } else {
@@ -154,6 +159,10 @@ export default {
       register(){
         this.$router.push('/register')
       }
+    },
+
+    mounted(){
+      this.refreshData()
     }
 }
 </script>
