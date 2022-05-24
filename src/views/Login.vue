@@ -84,7 +84,7 @@
               Please select the company you want to access
             </div>
             <v-select
-              :items="input.companies"
+              :items="userCompanies"
               dense
               solo
             >
@@ -115,9 +115,8 @@ export default {
       authenticated: false,
       valid: false,
       input: {
-        username: "",
-        password: "",
-        companies:[],
+        username: '',
+        password: '',
       },
       nameRules: [
         v => !!v || 'Username is required',
@@ -128,22 +127,31 @@ export default {
       ],
       checkbox: false,
       users:[],
+      userCompanies:[],
     }),
 
     methods: {
-      refreshData(){
+      getUsers(){
         axios.get("http://localhost:5290/api/users")
         .then((Response)=>{
           this.users=Response.data;
-          console.log(this.users);
         });
       },
+
+      getUserAccess(id){
+        axios.get(`http://localhost:5290/api/usersAccess/${id}`)
+        .then((Response)=>{
+          this.userCompanies=Response.data;
+        });
+      },
+
 
       login() {
         if(this.input.username != "" && this.input.password != "") {
             this.users.some(user => {
               if(user.userName === this.input.username && user.password === this.input.password){
                 this.authenticated = true;
+                this.getUserAccess(user.userID);
               }
             }) 
         } else {
@@ -162,7 +170,7 @@ export default {
     },
 
     mounted(){
-      this.refreshData()
+      this.getUsers()
     }
 }
 </script>
