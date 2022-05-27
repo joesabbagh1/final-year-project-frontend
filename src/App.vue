@@ -1,11 +1,12 @@
 <template>
   <v-app>
     <v-main>
-      <template v-if="authenticated">
+      <!-- v-if="authenticated" -->
+      <template>
         <TopBar @authenticated="setAuthenticated" />
         <SideBar />
       </template>
-      <router-view :users="mockAccounts" @authenticated="setAuthenticated" />
+      <router-view  @authenticated="setAuthenticated" />
     </v-main>
   </v-app>
 </template>
@@ -26,38 +27,12 @@ export default {
   data() {
     return {
       authenticated: false,
-      mockAccounts: [
-      {
-        username: "joe",
-        password: "1",
-        companies: [
-          'fattal',
-          'google',
-          'facebook',
-        ]
-      },
-      {
-        username: "elie",
-        password: "2",
-        companies: [
-          'amazon',
-          'murex',
-        ]
-      },
-      {
-        username: "3",
-        password: "3",
-        companies: [
-          'fattal',
-        ]
-      }
-    ],
     }
   },
   mounted() {
-    if(!this.authenticated) {
-      this.$router.replace({ name: "login" });
-    }
+    // if(!this.authenticated) {
+    //   this.$router.replace({ name: "login" });
+    // }
   },
   methods: {
     setAuthenticated(status) {
