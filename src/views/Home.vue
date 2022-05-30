@@ -29,7 +29,7 @@ export default {
       loading: true
     }
   },
-
+// [ [ "Suppliers & Surveys", "Setup", null ], [ "Automated Sales Force", "Setup", null ], [ "Nielsen", "Utility", null ], [ "Automated Sales Force", "Tools", null ], [ "Automated Sales Force", "Messages/Notes", null ], [ "Automated Sales Force", "GPS File", null ], [ "Automated Sales Force", "Inquiry", null ], [ "System Setup", "Utility", null ], [ "Automated Sales Force", "GPS File", "Google Earth" ], [ "Automated Sales Force", "Routes", null ], [ "Suppliers & Surveys", "Suppliers", null ], [ "Suppliers & Surveys", "Survey", null ], [ "Suppliers & Surveys", "Tasks", null ], [ "Suppliers & Surveys", "Market Insight", null ] ]
   async created(){
     await this.getMenusDescription1()
     await this.getMenusDescription2()
