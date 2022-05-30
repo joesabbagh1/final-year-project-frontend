@@ -3,6 +3,9 @@
     <div>
       {{this.usersMenus}}
     </div>
+    <div class="pa-10">
+      {{this.completeMenu}}
+    </div>
   </div>
 </template>
 
@@ -35,6 +38,7 @@ export default {
     // await this.getMenusFinal()
     this.loading = false
   },
+
 
   methods: {
     async getUsersMenus(id){
@@ -79,6 +83,30 @@ export default {
         this.usersMenus1.forEach((e,i) => {
           let a = [ e, this.usersMenus2[i], this.usersMenus3[i]]
           this.usersMenus.push(a)
+        })
+
+        this.usersMenus.forEach(v => {
+          v.forEach((v2,i2,a2) => {
+            if(!(this.completeMenu.some((v3,i3,a3) => { return v2 === v3.title })) && i2 == 0) {
+              let obj = { title: v2, subTitles: []}
+              this.completeMenu.push(obj)
+            }
+          })
+        })
+        this.usersMenus.forEach((v,i,a) => {
+          v.forEach((v2,i2,a2)=>{
+            if (this.completeMenu.length === 0) {
+              let obj = { title: v2, subTitles: []}
+              this.completeMenu.push(obj)
+            }
+            if(this.completeMenu.some((v3,i3,a3) => { return v2 === v3.title })){
+              let obj = {title: a2[i2+1]}
+              let index = this.completeMenu.findIndex(
+                element => element.title === v2
+              )
+              this.completeMenu[index].subTitles.push(obj)
+            }
+          })
         })
       });
     },

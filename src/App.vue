@@ -3,10 +3,11 @@
     <v-main>
       <!-- v-if="authenticated" -->
       <template>
-        <TopBar @authenticated="setAuthenticated" />
-        <SideBar />
+        <TopBar  @authenticated="setAuthenticated" />
+        <!-- <SideBar /> -->
+        <!-- <SideBar1 :drawer="drawer" /> -->
       </template>
-      <router-view  @authenticated="setAuthenticated" />
+      <router-view @authenticated="setAuthenticated" />
     </v-main>
   </v-app>
 </template>
@@ -21,7 +22,7 @@ export default {
 
   components:{
     SideBar,
-    TopBar
+    TopBar,
   },
 
   data() {
@@ -38,6 +39,9 @@ export default {
     setAuthenticated(status) {
       this.authenticated = status;
       console.log(this.authenticated)
+    },
+    toggleDrawer(){
+      this.drawer = !this.drawer
     },
     logout() {
       this.authenticated = false;
