@@ -85,29 +85,72 @@ export default {
           this.usersMenus.push(a)
         })
 
+
         this.usersMenus.forEach(v => {
           v.forEach((v2,i2,a2) => {
-            if(!(this.completeMenu.some((v3,i3,a3) => { return v2 === v3.title })) && i2 == 0) {
+            if(i2 == 0 && !(this.completeMenu.some((v3,i3,a3) => { return v2 === v3.title }))) {
               let obj = { title: v2, subTitles: []}
               this.completeMenu.push(obj)
             }
-          })
-        })
-        this.usersMenus.forEach((v,i,a) => {
-          v.forEach((v2,i2,a2)=>{
-            if (this.completeMenu.length === 0) {
-              let obj = { title: v2, subTitles: []}
-              this.completeMenu.push(obj)
-            }
-            if(this.completeMenu.some((v3,i3,a3) => { return v2 === v3.title })){
-              let obj = {title: a2[i2+1]}
               let index = this.completeMenu.findIndex(
-                element => element.title === v2
+                element => element.title === a2[i2-1]
+              )
+              console.log(this.completeMenu[index]);
+              if (this.completeMenu[index]) {
+                
+              }
+              if(i2 == 1 && !(this.completeMenu.some((v3,i3,a3) => { 
+              let subTitle = false
+              v3.subTitles.forEach(v4 => {
+                if(v2 == v4.title){
+                  subTitle = true
+                }
+              })
+              return subTitle 
+              }))) 
+            {
+              let obj = {}
+              if (a2[i2+1]) {
+                obj = { title: v2, subTitles: []}
+              }
+              else{
+                obj = {title: v2}
+              }
+              let index = this.completeMenu.findIndex(
+                element => element.title === a2[i2-1]
               )
               this.completeMenu[index].subTitles.push(obj)
             }
+
+            if(i2 == 2 && v2) {
+              let obj = { title: v2}
+              let index1 = this.completeMenu.findIndex(
+                element => element.title === a2[i2-2]
+              )
+              console.log(index1);
+              let index2 = this.completeMenu[index1].subTitles.findIndex(
+                element => element.title === a2[i2-1]
+              )
+              console.log(index2);
+              // this.completeMenu[index1].subTitles[index2].push(obj)
+            }
           })
         })
+        // this.usersMenus.forEach((v,i,a) => {
+        //   v.forEach((v2,i2,a2)=>{
+        //     if (this.completeMenu.length === 0) {
+        //       let obj = { title: v2, subTitles: []}
+        //       this.completeMenu.push(obj)
+        //     }
+        //     if(this.completeMenu.some((v3,i3,a3) => { return v2 === v3.title })){
+        //       let obj = {title: a2[i2+1]}
+        //       let index = this.completeMenu.findIndex(
+        //         element => element.title === v2
+        //       )
+        //       this.completeMenu[index].subTitles.push(obj)
+        //     }
+        //   })
+        // })
       });
     },
   
