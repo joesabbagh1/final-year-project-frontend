@@ -92,47 +92,35 @@ export default {
               let obj = { title: v2, subTitles: []}
               this.completeMenu.push(obj)
             }
-              let index = this.completeMenu.findIndex(
-                element => element.title === a2[i2-1]
-              )
-              console.log(this.completeMenu[index]);
-              if (this.completeMenu[index]) {
-                
-              }
-              if(i2 == 1 && !(this.completeMenu.some((v3,i3,a3) => { 
-              let subTitle = false
-              v3.subTitles.forEach(v4 => {
-                if(v2 == v4.title){
-                  subTitle = true
+            if(i2 == 1) {
+              {
+                let index = this.completeMenu.findIndex(
+                  element => element.title === a2[0]
+                )
+                let obj = {}
+                if (a2[2]) {
+                  obj = { title: v2, subTitles: []}
                 }
-              })
-              return subTitle 
-              }))) 
-            {
-              let obj = {}
-              if (a2[i2+1]) {
-                obj = { title: v2, subTitles: []}
+                else{
+                  obj = {title: v2}
+                }
+                this.completeMenu[index].subTitles.push(obj)
               }
-              else{
-                obj = {title: v2}
-              }
-              let index = this.completeMenu.findIndex(
-                element => element.title === a2[i2-1]
-              )
-              this.completeMenu[index].subTitles.push(obj)
             }
 
             if(i2 == 2 && v2) {
               let obj = { title: v2}
               let index1 = this.completeMenu.findIndex(
-                element => element.title === a2[i2-2]
+                element => element.title === a2[0]
               )
               console.log(index1);
-              let index2 = this.completeMenu[index1].subTitles.findIndex(
-                element => element.title === a2[i2-1]
-              )
+
+              let index2 = this.completeMenu[index1].subTitles.findIndex((e,i,a) => {
+                  return e.title === a2[1] && e.subTitles
+              })
               console.log(index2);
-              // this.completeMenu[index1].subTitles[index2].push(obj)
+              console.log(this.completeMenu[index1].subTitles[index2].subTitles);
+              this.completeMenu[index1].subTitles[index2].subTitles.push(obj)
             }
           })
         })
