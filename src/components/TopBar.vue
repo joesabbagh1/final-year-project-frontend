@@ -25,7 +25,7 @@
     <v-list>
 			<v-list-group
 				:value="false"
-        v-for="item in data"
+        v-for="item in completeMenu"
         :key="item.title"
 			>
 				<template v-slot:activator>
@@ -61,14 +61,23 @@
 </template>
 
 <script>
+import { mapActions, mapGetters } from "vuex";
+
 export default {
 
   data(){
     return {
       drawer: false,
-      data:[ { "title": "Suppliers & Surveys", "subTitles": [ { "title": "Setup" }, { "title": "Suppliers" }, { "title": "Survey" }, { "title": "Tasks" }, { "title": "Market Insight" } ] }, { "title": "Automated Sales Force", "subTitles": [ { "title": "Setup" }, { "title": "Tools" }, { "title": "Messages/Notes" }, { "title": "GPS File" }, { "title": "Inquiry" }, { "title": "GPS File", "subTitles": [ { "title": "Google Earth" } ] }, { "title": "Routes" } ] }, { "title": "Nielsen", "subTitles": [ { "title": "Utility" } ] }, { "title": "System Setup", "subTitles": [ { "title": "Utility" } ] } ]
     }
   },
+
+  computed: {
+		...mapGetters(
+			{
+				completeMenu: "getCompleteMenu",
+				loading: "loading"
+			})
+	},
 
   methods:{
     toggleDrawer(){
@@ -77,10 +86,16 @@ export default {
     logout(){
       this.$emit("authenticated", false);
       this.$router.push('/login')
-      window.location.reload();
-    }
-  }
-
+    },
+    ...mapActions(
+			{
+				setMenu: "getUsersMenus"
+			})
+	},
+  
+  async mounted (){
+		await this.setMenu()
+	}
 
 }
 </script>

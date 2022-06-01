@@ -6,6 +6,12 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
+    users: [],
+    username: '',
+    password: '',
+    userID: null,
+    authenticated: false,
+    userCompanies: [],
     MenusDescription1: [],
     MenusDescription2: [],
     MenusDescription3: [],
@@ -13,6 +19,11 @@ export default new Vuex.Store({
     loading: false
   },
   getters: {
+    getUsers: state => state.users,
+    getUsername: state => state.username,
+    getPassword: state => state.password,
+    getAuthentication: state => state.authenticated,
+    getUsersCompanies: state => state.userCompanies,
     getMenusDescription1: state => state.MenusDescription1,
     getMenusDescription2: state => state.MenusDescription2,
     getMenusDescription3: state => state.MenusDescription3,
@@ -20,6 +31,24 @@ export default new Vuex.Store({
     loading: state => state.loading
   },
   mutations: {
+    setUsers(state, payload){
+      state.users = payload;
+    },
+    setUsernName(state, payload){
+      state.username = payload;
+    },
+    setPassword(state, payload){
+      state.password = payload;
+    },
+    setUserId(state, payload){
+      state.userID = payload;
+    },
+    setAuthentication(state, payload){
+      state.authenticated = payload;
+    },
+    setUsersCompanies(state, payload){
+      state.userCompanies = payload;
+    },
     setCompleteMenu(state, payload) {
       state.completeMenu = payload;
     },
@@ -38,8 +67,41 @@ export default new Vuex.Store({
     
   },
   actions: {
+
+    async getUsers(context){
+      context.commit("setLoading", true)
+      await axios.get("http://localhost:5290/api/users")
+      .then((Response)=>{
+        context.commit("setUsers", Response.data)
+        context.commit("setLoading", false)
+      });
+    },
+
+    login(context, {username, password}) {
+      if(username != "" && password != "") {
+          context.state.users.some(user => {
+            if(user.userName === username && user.password === password){
+              context.commit("setAuthentication", true)
+              context.commit("setUserId", user.userID)
+              context.dispatch('getUserAccess');
+            }
+          }) 
+      } else {
+        console.log("A username and password must be present");
+      }
+
+    },
+
+    async getUserAccess(context){
+      await axios.get(`http://localhost:5290/api/usersAccess/${context.state.userID}`)
+      .then((Response)=>{
+        context.commit("setUsersCompanies", Response.data)
+        context.commit("setLoading", false)
+      });
+    },
+
     async getUsersMenus(context){
-      let usersMenus = [], usersMenus1 = [], usersMenus2 = [], usersMenus3 = [], completeMenu = [],MenusDescription1 = [], MenusDescription2 = [], MenusDescription3 = []
+      let usersMenus = [], usersMenus1 = [], usersMenus2 = [], usersMenus3 = [], completeMenu = []
 
       context.dispatch('getMenusDescription1')
       context.dispatch('getMenusDescription2')

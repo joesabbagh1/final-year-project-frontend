@@ -105,14 +105,13 @@
 </template>
 
 <script>
-import axios from 'axios';
+import { mapActions, mapGetters } from "vuex";
+
 export default {
   
   name: 'Login',
 
   data: () => ({
-      API_URL: 'http://localhost:5290/api/',
-      authenticated: false,
       valid: false,
       input: {
         username: '',
@@ -126,38 +125,25 @@ export default {
         v => !!v || 'Password is required',
       ],
       checkbox: false,
-      users:[],
-      userCompanies:[],
     }),
 
-    methods: {
-      getUsers(){
-        axios.get("http://localhost:5290/api/users")
-        .then((Response)=>{
-          this.users=Response.data;
-        });
-      },
-
-      getUserAccess(id){
-        axios.get(`http://localhost:5290/api/usersAccess/${id}`)
-        .then((Response)=>{
-          this.userCompanies=Response.data;
-        });
-      },
-
-
-      login() {
-        if(this.input.username != "" && this.input.password != "") {
-            this.users.some(user => {
-              if(user.userName === this.input.username && user.password === this.input.password){
-                this.authenticated = true;
-                this.getUserAccess(user.userID);
-              }
-            }) 
-        } else {
-          console.log("A username and password must be present");
+    computed: {
+      ...mapGetters(
+        {
+          userCompanies: "getUsersCompanies",
+          authenticated: "getAuthentication"
         }
-      },
+      )
+    },
+
+    methods: {
+
+      ...mapActions(
+        {
+          getUsers: 'getUsers',
+          login: 'login'
+        }
+      ),
 
       companiesLogin(){
         this.$emit("authenticated", true);
@@ -169,8 +155,9 @@ export default {
       }
     },
 
-    mounted(){
-      this.getUsers()
+    async mounted(){
+      await this.getUsers()
+      this.login(this.input.username, this.input.password)
     }
 }
 </script>
