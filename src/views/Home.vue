@@ -1,171 +1,33 @@
 <template>
   <div v-if="!loading">
-    <div>
-      {{this.usersMenus}}
-    </div>
     <div class="pa-10">
-      {{this.completeMenu}}
+      {{completeMenu}}
     </div>
   </div>
 </template>
 
 <script>
-import axios from 'axios';
+import { mapActions, mapGetters } from "vuex";
 export default {
   name: 'Home',
-  components: {
-    
-  },
-  data() {
-    return {
-      usersMenus: [],
-      usersMenus1: [],
-      usersMenus2: [],
-      usersMenus3: [],
-      MenusDescription1: [],
-      MenusDescription2: [],
-      MenusDescription3: [],
-      completeMenu: [],
-      loading: true
-    }
-  },
-// [ [ "Suppliers & Surveys", "Setup", null ], [ "Automated Sales Force", "Setup", null ], [ "Nielsen", "Utility", null ], [ "Automated Sales Force", "Tools", null ], [ "Automated Sales Force", "Messages/Notes", null ], [ "Automated Sales Force", "GPS File", null ], [ "Automated Sales Force", "Inquiry", null ], [ "System Setup", "Utility", null ], [ "Automated Sales Force", "GPS File", "Google Earth" ], [ "Automated Sales Force", "Routes", null ], [ "Suppliers & Surveys", "Suppliers", null ], [ "Suppliers & Surveys", "Survey", null ], [ "Suppliers & Surveys", "Tasks", null ], [ "Suppliers & Surveys", "Market Insight", null ] ]
-  async created(){
-    await this.getMenusDescription1()
-    await this.getMenusDescription2()
-    await this.getMenusDescription3()
-    await this.getUsersMenus(1)
-    // await this.getMenusFinal()
-    this.loading = false
-  },
-
-
-  methods: {
-    async getUsersMenus(id){
-      axios.get(`http://localhost:5290/api/UsersMenusAccess/${id}`)
-      .then((Response)=>{
-        this.usersMenus1= Response.data.map(e => {
-          return e.mainNodeID1
-        })
-
-        this.usersMenus1.forEach((e1, i, a) => {
-          this.MenusDescription1.forEach(e2 => {
-            if (e1 == e2.subVariableCode) {
-              a[i] = e2.description
-            }
-          })
-        })
-
-        this.usersMenus2= Response.data.map(e => {
-          return e.mainNodeID2
-        })
-
-        this.usersMenus2.forEach((e1, i, a) => {
-          this.MenusDescription2.forEach(e2 => {
-            if (e1 == e2.subVariableCode) {
-              a[i] = e2.description
-            }
-          })
-        })
-
-        this.usersMenus3= Response.data.map(e => {
-          return e.mainNodeID3
-        })
-
-        this.usersMenus3.forEach((e1, i, a) => {
-          this.MenusDescription3.forEach(e2 => {
-            if (e1 == e2.subVariableCode) {
-              a[i] = e2.description
-            }
-          })
-        })
-        
-        this.usersMenus1.forEach((e,i) => {
-          let a = [ e, this.usersMenus2[i], this.usersMenus3[i]]
-          this.usersMenus.push(a)
-        })
-
-
-        this.usersMenus.forEach(v => {
-          v.forEach((v2,i2,a2) => {
-            if(i2 == 0 && !(this.completeMenu.some((v3,i3,a3) => { return v2 === v3.title }))) {
-              let obj = { title: v2, subTitles: []}
-              this.completeMenu.push(obj)
-            }
-            if(i2 == 1) {
-              {
-                let index = this.completeMenu.findIndex(
-                  element => element.title === a2[0]
-                )
-                let obj = {}
-                if (a2[2]) {
-                  obj = { title: v2, subTitles: []}
-                }
-                else{
-                  obj = {title: v2}
-                }
-                this.completeMenu[index].subTitles.push(obj)
-              }
-            }
-
-            if(i2 == 2 && v2) {
-              let obj = { title: v2}
-              let index1 = this.completeMenu.findIndex(
-                element => element.title === a2[0]
-              )
-              console.log(index1);
-
-              let index2 = this.completeMenu[index1].subTitles.findIndex((e,i,a) => {
-                  return e.title === a2[1] && e.subTitles
-              })
-              console.log(index2);
-              console.log(this.completeMenu[index1].subTitles[index2].subTitles);
-              this.completeMenu[index1].subTitles[index2].subTitles.push(obj)
-            }
-          })
-        })
-        // this.usersMenus.forEach((v,i,a) => {
-        //   v.forEach((v2,i2,a2)=>{
-        //     if (this.completeMenu.length === 0) {
-        //       let obj = { title: v2, subTitles: []}
-        //       this.completeMenu.push(obj)
-        //     }
-        //     if(this.completeMenu.some((v3,i3,a3) => { return v2 === v3.title })){
-        //       let obj = {title: a2[i2+1]}
-        //       let index = this.completeMenu.findIndex(
-        //         element => element.title === v2
-        //       )
-        //       this.completeMenu[index].subTitles.push(obj)
-        //     }
-        //   })
-        // })
-      });
-    },
   
-    async getMenusDescription1(){
-      await axios.get(`http://localhost:5290/api/UsersMenusAccess/api/UsersMenusAccess/menusDescription/1`)
-      .then((Response)=>{
-        this.MenusDescription1 = Response.data
-      });
-    },
-    async getMenusDescription2(){
-      await axios.get(`http://localhost:5290/api/UsersMenusAccess/api/UsersMenusAccess/menusDescription/2`)
-      .then((Response)=>{
-        this.MenusDescription2 = Response.data
-      });
-    },
-    async getMenusDescription3(){
-      await axios.get(`http://localhost:5290/api/UsersMenusAccess/api/UsersMenusAccess/menusDescription/3`)
-      .then((Response)=>{
-        this.MenusDescription3 = Response.data
-      });
-    },
+	computed: {
+		...mapGetters(
+			{
+				completeMenu: "getCompleteMenu",
+				loading: "loading"
+			})
+	},
 
-    async getMenusFinal(){
-      
-      return values
-    }
-  },
-  
+	methods: {
+		...mapActions(
+			{
+				setMenu: "getUsersMenus"
+			})
+	},
+
+	async mounted (){
+		await this.setMenu()
+	}
 }
 </script>
