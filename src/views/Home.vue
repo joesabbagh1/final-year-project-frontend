@@ -1,8 +1,8 @@
 <template>
   <div v-if="!loading">
-    <div class="pa-10">
-      {{completeMenu}}
-    </div>
+    <router-link to="/test" class="pa-10 text-pink-400">
+		xcc	
+  	</router-link>
   </div>
 </template>
 

@@ -3,49 +3,49 @@
     <v-main>
       <!-- v-if="authenticated" -->
       <template>
-        <TopBar  @authenticated="setAuthenticated" />
+        <TopBar v-if="authenticated" />
         <!-- <SideBar /> -->
         <!-- <SideBar1 :drawer="drawer" /> -->
       </template>
-      <router-view @authenticated="setAuthenticated" />
+      <router-view />
     </v-main>
   </v-app>
 </template>
 
 <script>
-import SideBar from './components/SideBar.vue';
 import TopBar from './components/TopBar.vue';
-
+import { mapActions, mapGetters } from "vuex";
 
 export default {
   name: 'App',
 
   components:{
-    SideBar,
     TopBar,
   },
 
-  data() {
-    return {
-      authenticated: false,
+  mounted() {
+    if(!this.authenticated) {
+      this.$router.replace({ name: "login" });
     }
   },
-  mounted() {
-    // if(!this.authenticated) {
-    //   this.$router.replace({ name: "login" });
-    // }
+
+  computed: {
+    ...mapGetters({
+      authenticated: "getAuthentication"
+    })
   },
+
   methods: {
-    setAuthenticated(status) {
-      this.authenticated = status;
-      console.log(this.authenticated)
-    },
+    ...mapActions({
+      authenticationFalse: "setAuthenticationFalse",
+      authenticationTrue: "setAuthenticationTrue"
+    }),
+
     toggleDrawer(){
       this.drawer = !this.drawer
     },
     logout() {
-      this.authenticated = false;
-      console.log(this.authenticated)
+      this.authenticationFalse;
     }
   }
 };

@@ -11,6 +11,7 @@ export default new Vuex.Store({
     password: '',
     userID: null,
     authenticated: false,
+    loggedIn: false,
     userCompanies: [],
     MenusDescription1: [],
     MenusDescription2: [],
@@ -23,6 +24,7 @@ export default new Vuex.Store({
     getUsername: state => state.username,
     getPassword: state => state.password,
     getAuthentication: state => state.authenticated,
+    getUserID: state => state.userID,
     getUsersCompanies: state => state.userCompanies,
     getMenusDescription1: state => state.MenusDescription1,
     getMenusDescription2: state => state.MenusDescription2,
@@ -34,7 +36,7 @@ export default new Vuex.Store({
     setUsers(state, payload){
       state.users = payload;
     },
-    setUsernName(state, payload){
+    setUserName(state, payload){
       state.username = payload;
     },
     setPassword(state, payload){
@@ -77,13 +79,14 @@ export default new Vuex.Store({
       });
     },
 
-    login(context, {username, password}) {
-      if(username != "" && password != "") {
+    login(context, data) {
+      if(data.username != "" && data.password != "") {
           context.state.users.some(user => {
-            if(user.userName === username && user.password === password){
-              context.commit("setAuthentication", true)
+            if(user.username === data.username && user.password === data.password){
               context.commit("setUserId", user.userID)
-              context.dispatch('getUserAccess');
+              context.commit("setUserName", user.username)
+              // axios.put(`http://localhost:5290/api/Users/${context.state.userID}`)
+              
             }
           }) 
       } else {
@@ -93,11 +96,15 @@ export default new Vuex.Store({
     },
 
     async getUserAccess(context){
-      await axios.get(`http://localhost:5290/api/usersAccess/${context.state.userID}`)
+      await axios.get(`http://localhost:5290/api/UsersCompaniesAccess/${context.state.userID}`)
       .then((Response)=>{
         context.commit("setUsersCompanies", Response.data)
         context.commit("setLoading", false)
       });
+    },
+
+    async userLogin(context){
+      
     },
 
     async getUsersMenus(context){
@@ -107,7 +114,7 @@ export default new Vuex.Store({
       context.dispatch('getMenusDescription2')
       context.dispatch('getMenusDescription3')
 
-      axios.get(`http://localhost:5290/api/UsersMenusAccess/1`)
+      axios.get(`http://localhost:5290/api/UsersMenusAccess/${context.state.userID}`)
       .then((Response)=>{
 
         usersMenus1= Response.data.map(e => {
@@ -190,6 +197,14 @@ export default new Vuex.Store({
       });
     },
   
+    async setAuthenticationFalse(context){
+      context.commit("setAuthentication", false)
+    },
+
+    async setAuthenticationTrue(context){
+      context.commit("setAuthentication", true)
+    },
+
     async getMenusDescription1(context){
       context.commit("setLoading", true)
       await axios.get(`http://localhost:5290/api/UsersMenusAccess/api/UsersMenusAccess/menusDescription/1`)
