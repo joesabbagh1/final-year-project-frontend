@@ -1,8 +1,11 @@
 <template>
   <div v-if="!loading">
     <router-link to="/test" class="pa-10 text-pink-400">
-		xcc	
+			xcc	
   	</router-link>
+		<div>
+			{{completeMenu}}
+		</div>
   </div>
 </template>
 

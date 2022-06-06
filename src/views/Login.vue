@@ -85,7 +85,9 @@
                 Please select the company you want to access
               </div>
               <v-select
-                :items="userCompanies"
+                :items="companiesDescription"
+                v-model="company.description"
+                @change="setSelectedCompany"
                 dense
                 solo
               >
@@ -120,6 +122,10 @@ export default {
         username: '',
         password: '',
       },
+      company:{
+        compNo: null,
+        description: ''
+      },
       nameRules: [
         v => !!v || 'Username is required',
         v => v.length <= 15 || 'Username must be less than 15 characters',
@@ -133,11 +139,19 @@ export default {
     computed: {
       ...mapGetters(
         {
-          userCompanies: "getUsersCompanies",
+          userCompanies: "getUserCompanies",
           authenticated: "getAuthentication",
           userID: "getUserID"
         }
-      )
+      ),
+
+      companiesDescription(){
+        return this.userCompanies.map(item => {
+          return item.description
+        })
+      },
+
+      
     },
 
     methods: {
@@ -145,7 +159,7 @@ export default {
       ...mapActions(
         {
           getUsers: 'getUsers',
-          getCompanies: 'getUserAccess',
+          setUserCompanies: 'setUserCompanies',
           setAuthenticationTrue: 'setAuthenticationTrue'
         }
       ),
@@ -154,8 +168,14 @@ export default {
         let username = this.input.username
         let password = this.input.password
         await this.$store.dispatch('login', { username, password })
-        await this.getCompanies(this.userID)
+        await this.setUserCompanies(this.userID)
         this.companies = true
+      },
+
+      setSelectedCompany(){
+        let index = this.userCompanies.findIndex(company => company.description == this.company.description)
+        this.company.compNo = this.userCompanies[index].compNo
+        this.$store.dispatch('setSelectedCompany', this.company)
       },
 
       async companiesLogin(){

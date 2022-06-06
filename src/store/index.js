@@ -10,9 +10,11 @@ export default new Vuex.Store({
     username: '',
     password: '',
     userID: null,
+    menuID: null,
     authenticated: false,
     loggedIn: false,
     userCompanies: [],
+    selectedCompany:{},
     MenusDescription1: [],
     MenusDescription2: [],
     MenusDescription3: [],
@@ -25,7 +27,8 @@ export default new Vuex.Store({
     getPassword: state => state.password,
     getAuthentication: state => state.authenticated,
     getUserID: state => state.userID,
-    getUsersCompanies: state => state.userCompanies,
+    getMenuID: state => state.menuID,
+    getUserCompanies: state => state.userCompanies,
     getMenusDescription1: state => state.MenusDescription1,
     getMenusDescription2: state => state.MenusDescription2,
     getMenusDescription3: state => state.MenusDescription3,
@@ -45,11 +48,17 @@ export default new Vuex.Store({
     setUserId(state, payload){
       state.userID = payload;
     },
+    setMenuId(state, payload){
+      state.menuID = payload;
+    },
     setAuthentication(state, payload){
       state.authenticated = payload;
     },
     setUsersCompanies(state, payload){
       state.userCompanies = payload;
+    },
+    setSelectedCompany(state, payload){
+      state.selectedCompany = payload;
     },
     setCompleteMenu(state, payload) {
       state.completeMenu = payload;
@@ -83,8 +92,9 @@ export default new Vuex.Store({
       if(data.username != "" && data.password != "") {
           context.state.users.some(user => {
             if(user.username === data.username && user.password === data.password){
-              context.commit("setUserId", user.userID)
               context.commit("setUserName", user.username)
+              context.commit("setUserId", user.userID)
+              context.commit("setMenuId", user.menuID)
               // axios.put(`http://localhost:5290/api/Users/${context.state.userID}`)
               
             }
@@ -95,7 +105,7 @@ export default new Vuex.Store({
 
     },
 
-    async getUserAccess(context){
+    async setUserCompanies(context){
       await axios.get(`http://localhost:5290/api/UsersCompaniesAccess/${context.state.userID}`)
       .then((Response)=>{
         context.commit("setUsersCompanies", Response.data)
@@ -103,131 +113,112 @@ export default new Vuex.Store({
       });
     },
 
-    async userLogin(context){
-      
-    },
+    // async getUsersMenus(context){
+    //   let usersMenus = [], usersMenus1 = [], usersMenus2 = [], usersMenus3 = [], completeMenu = []
 
-    async getUsersMenus(context){
-      let usersMenus = [], usersMenus1 = [], usersMenus2 = [], usersMenus3 = [], completeMenu = []
+    //   context.dispatch('getMenusDescription1')
+    //   context.dispatch('getMenusDescription2')
+    //   context.dispatch('getMenusDescription3')
 
-      context.dispatch('getMenusDescription1')
-      context.dispatch('getMenusDescription2')
-      context.dispatch('getMenusDescription3')
+    //   axios.get(`http://localhost:5290/api/UsersMenusAccess/${context.state.userID}`)
+    //   .then((Response)=>{
 
-      axios.get(`http://localhost:5290/api/UsersMenusAccess/${context.state.userID}`)
-      .then((Response)=>{
-
-        usersMenus1= Response.data.map(e => {
-          return e.mainNodeID1
-        })
+    //     usersMenus1= Response.data.map(e => {
+    //       return e.mainNodeID1
+    //     })
         
-        usersMenus1.forEach((e1, i, a) => {
-          context.state.MenusDescription1.forEach(e2 => {
-            if (e1 == e2.subVariableCode) {
-              a[i] = e2.description
-            }
-          })
-        })
+    //     usersMenus1.forEach((e1, i, a) => {
+    //       context.state.MenusDescription1.forEach(e2 => {
+    //         if (e1 == e2.subVariableCode) {
+    //           a[i] = e2.description
+    //         }
+    //       })
+    //     })
 
-        usersMenus2= Response.data.map(e => {
-          return e.mainNodeID2
-        })
+    //     usersMenus2= Response.data.map(e => {
+    //       return e.mainNodeID2
+    //     })
 
-        usersMenus2.forEach((e1, i, a) => {
-          context.state.MenusDescription2.forEach(e2 => {
-            if (e1 == e2.subVariableCode) {
-              a[i] = e2.description
-            }
-          })
-        })
+    //     usersMenus2.forEach((e1, i, a) => {
+    //       context.state.MenusDescription2.forEach(e2 => {
+    //         if (e1 == e2.subVariableCode) {
+    //           a[i] = e2.description
+    //         }
+    //       })
+    //     })
 
-        usersMenus3= Response.data.map(e => {
-          return e.mainNodeID3
-        })
+    //     usersMenus3= Response.data.map(e => {
+    //       return e.mainNodeID3
+    //     })
 
-        usersMenus3.forEach((e1, i, a) => {
-          context.state.MenusDescription3.forEach(e2 => {
-            if (e1 == e2.subVariableCode) {
-              a[i] = e2.description
-            }
-          })
-        })
+    //     usersMenus3.forEach((e1, i, a) => {
+    //       context.state.MenusDescription3.forEach(e2 => {
+    //         if (e1 == e2.subVariableCode) {
+    //           a[i] = e2.description
+    //         }
+    //       })
+    //     })
 
-        usersMenus1.forEach((e,i) => {
-          let a = [ e, usersMenus2[i], usersMenus3[i]]
-          usersMenus.push(a)
-        })
+    //     usersMenus1.forEach((e,i) => {
+    //       let a = [ e, usersMenus2[i], usersMenus3[i]]
+    //       usersMenus.push(a)
+    //     })
 
-        usersMenus.forEach(v => {
-          v.forEach((v2,i2,a2) => {
-            if(i2 == 0 && !(completeMenu.some((v3,i3,a3) => { return v2 === v3.title }))) {
-              let obj = { title: v2, subTitles: []}
-              completeMenu.push(obj)
-            }
-            if(i2 == 1) {
-              {
-                let index = completeMenu.findIndex(
-                  element => element.title === a2[0]
-                )
-                let obj = {}
-                if (a2[2]) {
-                  obj = { title: v2, subTitles: []}
-                }
-                else{
-                  obj = {title: v2}
-                }
-                completeMenu[index].subTitles.push(obj)
-              }
-            }
+    //     usersMenus.forEach(v => {
+    //       v.forEach((v2,i2,a2) => {
+    //         if(i2 == 0 && !(completeMenu.some((v3,i3,a3) => { return v2 === v3.title }))) {
+    //           let obj = { title: v2, subTitles: []}
+    //           completeMenu.push(obj)
+    //         }
+    //         if(i2 == 1) {
+    //           {
+    //             let index = completeMenu.findIndex(
+    //               element => element.title === a2[0]
+    //             )
+    //             let obj = {}
+    //             if (a2[2]) {
+    //               obj = { title: v2, subTitles: []}
+    //             }
+    //             else{
+    //               obj = {title: v2}
+    //             }
+    //             completeMenu[index].subTitles.push(obj)
+    //           }
+    //         }
 
-            if(i2 == 2 && v2) {
-              let obj = { title: v2}
-              let index1 = completeMenu.findIndex(
-                element => element.title === a2[0]
-              )
+    //         if(i2 == 2 && v2) {
+    //           let obj = { title: v2}
+    //           let index1 = completeMenu.findIndex(
+    //             element => element.title === a2[0]
+    //           )
 
-              let index2 = completeMenu[index1].subTitles.findIndex((e,i,a) => {
-                  return e.title === a2[1] && e.subTitles
-              })
-              completeMenu[index1].subTitles[index2].subTitles.push(obj)
-            }
-          })
-          context.commit("setCompleteMenu", completeMenu)
-        })
-      });
-    },
+    //           let index2 = completeMenu[index1].subTitles.findIndex((e,i,a) => {
+    //               return e.title === a2[1] && e.subTitles
+    //           })
+    //           completeMenu[index1].subTitles[index2].subTitles.push(obj)
+    //         }
+    //       })
+    //       context.commit("setCompleteMenu", completeMenu)
+    //     })
+    //   });
+    // },
   
+    async getUsersMenus(context){
+      await axios.get(`http://localhost:5290/api/UsersMenusAccess/${context.state.userID}/${context.state.company.compNo}`)
+      .then((Response)=>{
+        conte
+      })
+    },
+
+    async setSelectedCompany(context, data){
+      context.commit("setSelectedCompany", data)
+    },
     async setAuthenticationFalse(context){
       context.commit("setAuthentication", false)
     },
 
     async setAuthenticationTrue(context){
       context.commit("setAuthentication", true)
-    },
-
-    async getMenusDescription1(context){
-      context.commit("setLoading", true)
-      await axios.get(`http://localhost:5290/api/UsersMenusAccess/api/UsersMenusAccess/menusDescription/1`)
-      .then((Response)=>{
-        context.commit("setMenuDescription1", Response.data)
-        context.commit("setLoading", false)
-      });
-    },
-    async getMenusDescription2(context){
-      context.commit("setLoading", true)
-      await axios.get(`http://localhost:5290/api/UsersMenusAccess/api/UsersMenusAccess/menusDescription/2`)
-      .then((Response)=>{
-        context.commit("setMenuDescription2", Response.data)
-        context.commit("setLoading", false)
-      });
-    },
-    async getMenusDescription3(context){
-      context.commit("setLoading", true)
-      await axios.get(`http://localhost:5290/api/UsersMenusAccess/api/UsersMenusAccess/menusDescription/3`)
-      .then((Response)=>{
-        context.commit("setMenuDescription3", Response.data)
-        context.commit("setLoading", false)
-      });
     },
   },
   modules: {},
