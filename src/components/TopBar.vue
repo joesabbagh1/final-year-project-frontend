@@ -6,13 +6,12 @@
     >
 
       <v-app-bar-nav-icon @click.stop="toggleDrawer"></v-app-bar-nav-icon>
-      <v-toolbar-title>Welcome {{username}}</v-toolbar-title>
 
       <v-spacer></v-spacer>
-
-      <div @click="logout()" style="cursor: pointer;">
+      
+      <div class="text-h6 font-weight-medium black--text" @click="logout()" style="cursor: pointer;">
         Log out
-      <v-icon>mdi-logout</v-icon>
+      <v-icon color="black" size="30">mdi-logout</v-icon>
       </div>
 
     </v-app-bar>
@@ -21,10 +20,23 @@
       temporary
       absolute
     >
+      <v-list-item>
+        <v-list-item-content>
+          <v-list-item-title class="text-h6">
+            Salesforce
+          </v-list-item-title>
+          <v-list-item-subtitle>
+            {{fullname}}
+          </v-list-item-subtitle>
+        </v-list-item-content>
+      </v-list-item>
+
+      <v-divider></v-divider>
+
       <v-list>
         <v-list-group
           :value="false"
-          v-for="item in completeMenu"
+          v-for="(item, index1) in completeMenu"
           :key="item.title"
         >
           <template v-slot:activator>
@@ -57,7 +69,7 @@
               </v-list-item>
             </v-list-group>
           </template> -->
-          <v-list-item class="grey lighten-5 pl-10" v-for="subTitle in item.subTitles" :key="subTitle.title">
+          <v-list-item class="grey lighten-5 pl-10" v-for="(subTitle, index2) in item.subTitles" :key="subTitle.title"  @click.stop="displayContent(index1, index2)" style="cursor: pointer;">
             <v-list-item-title>
               {{subTitle.title}}
             </v-list-item-title>
@@ -76,6 +88,7 @@ export default {
   data(){
     return {
       drawer: false,
+      titleSelectedIndex: null,
     }
   },
 
@@ -84,11 +97,16 @@ export default {
 			{
 				completeMenu: "getCompleteMenu",
 				loading: "loading",
-        username:"getUsername"
+        fullname:"getFullname"
 			})
 	},
 
   methods:{
+    ...mapActions(
+      {
+        setMenu: "getUsersMenus"
+      }),
+      
     toggleDrawer(){
       this.drawer = !this.drawer
     },
@@ -96,10 +114,10 @@ export default {
       this.$emit("authenticated", false);
       this.$router.push('/login')
     },
-    ...mapActions(
-			{
-				setMenu: "getUsersMenus"
-			})
+
+    displayContent(index1, index2){
+      this.$store.dispatch('setTitleSelectedContent', [index1, index2])
+    }
 	},
   
   async mounted (){

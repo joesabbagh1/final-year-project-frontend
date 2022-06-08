@@ -8,6 +8,7 @@ export default new Vuex.Store({
   state: {
     users: [],
     username: '',
+    fullname: '',
     password: '',
     userID: null,
     menuID: null,
@@ -16,17 +17,20 @@ export default new Vuex.Store({
     userCompanies: [],
     selectedCompany:{},
     completeMenu: [],
+    titleSelectedContent: [],
     loading: false
   },
   getters: {
     getUsers: state => state.users,
     getUsername: state => state.username,
+    getFullname: state => state.fullname,
     getPassword: state => state.password,
     getAuthentication: state => state.authenticated,
     getUserID: state => state.userID,
     getMenuID: state => state.menuID,
     getUserCompanies: state => state.userCompanies,
     getCompleteMenu: state => state.completeMenu,
+    getTitleSelectedContent: state => state.titleSelectedContent,
     loading: state => state.loading
   },
   mutations: {
@@ -35,6 +39,9 @@ export default new Vuex.Store({
     },
     setUserName(state, payload){
       state.username = payload;
+    },
+    setFullName(state, payload){
+      state.fullname = payload;
     },
     setPassword(state, payload){
       state.password = payload;
@@ -69,7 +76,9 @@ export default new Vuex.Store({
     setLoading(state, payload) {
       state.loading = payload;
     },
-    
+    setTitleSelectedContent(state, payload){
+      state.titleSelectedContent = payload
+    }
   },
   actions: {
 
@@ -87,6 +96,7 @@ export default new Vuex.Store({
           context.state.users.some(user => {
             if(user.username === data.username && user.password === data.password){
               context.commit("setUserName", user.username)
+              context.commit("setFullName", user.fullname)
               context.commit("setUserId", user.userID)
               context.commit("setMenuId", user.menuID)
               // axios.put(`http://localhost:5290/api/Users/${context.state.userID}`)
@@ -108,7 +118,7 @@ export default new Vuex.Store({
     },
   
     async getUsersMenus(context){
-      let usersMenus = [], usersMenus1 = [], usersMenus2 = [], usersMenus3 = [], usersMenus4 = [], usersMenus5 = [], menusContent = [], completeMenu = []
+      let usersMenus = [], usersMenus1 = [], usersMenus2 = [], usersMenus3 = [], usersMenus4 = [], usersMenus5 = [], menusContent = [], nodeId = [], completeMenu = []
 
       await axios.get(`http://localhost:5290/api/UsersMenusAccess/${context.state.menuID}/${context.state.selectedCompany.compNo}`)
       .then((Response)=>{
@@ -136,8 +146,11 @@ export default new Vuex.Store({
           return e.nodeDescription
         })
 
+        nodeId= Response.data.map(e => {
+          return e.nodeID
+        })
         usersMenus1.forEach((e,i) => {
-          let a = [ e, usersMenus2[i], usersMenus3[i], usersMenus4[i], usersMenus5[i], menusContent[i]]
+          let a = [ e, usersMenus2[i], usersMenus3[i], usersMenus4[i], usersMenus5[i], menusContent[i], nodeId[i]]
           usersMenus.push(a)
         })
         usersMenus.forEach(v => {
@@ -176,18 +189,15 @@ export default new Vuex.Store({
             }
 
             if (i2 == 5) {
-              let obj = { title: v2}
+              let obj = { title: v2, nodeId: a2[6]}
               let index2 = completeMenu[index].subTitles.findIndex((e,i,a) => {
                 return e.title === a2[1]
               })
-              // console.log(index2);
               completeMenu[index].subTitles[index2].content.push(obj)
             }
           })
         })
-        // context.commit("setCompleteMenu", Response.data)
         context.commit("setCompleteMenu", completeMenu)
-
       })
     },
 
@@ -201,6 +211,11 @@ export default new Vuex.Store({
     async setAuthenticationTrue(context){
       context.commit("setAuthentication", true)
     },
+
+    async setTitleSelectedContent(context, data){
+      let content = context.state.completeMenu[data[0]].subTitles[data[1]].content
+      context.commit("setTitleSelectedContent", content)
+    }
   },
   modules: {},
 });
