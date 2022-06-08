@@ -15,9 +15,6 @@ export default new Vuex.Store({
     loggedIn: false,
     userCompanies: [],
     selectedCompany:{},
-    MenusDescription1: [],
-    MenusDescription2: [],
-    MenusDescription3: [],
     completeMenu: [],
     loading: false
   },
@@ -29,9 +26,6 @@ export default new Vuex.Store({
     getUserID: state => state.userID,
     getMenuID: state => state.menuID,
     getUserCompanies: state => state.userCompanies,
-    getMenusDescription1: state => state.MenusDescription1,
-    getMenusDescription2: state => state.MenusDescription2,
-    getMenusDescription3: state => state.MenusDescription3,
     getCompleteMenu: state => state.completeMenu,
     loading: state => state.loading
   },
@@ -112,101 +106,88 @@ export default new Vuex.Store({
         context.commit("setLoading", false)
       });
     },
-
-    // async getUsersMenus(context){
-    //   let usersMenus = [], usersMenus1 = [], usersMenus2 = [], usersMenus3 = [], completeMenu = []
-
-    //   context.dispatch('getMenusDescription1')
-    //   context.dispatch('getMenusDescription2')
-    //   context.dispatch('getMenusDescription3')
-
-    //   axios.get(`http://localhost:5290/api/UsersMenusAccess/${context.state.userID}`)
-    //   .then((Response)=>{
-
-    //     usersMenus1= Response.data.map(e => {
-    //       return e.mainNodeID1
-    //     })
-        
-    //     usersMenus1.forEach((e1, i, a) => {
-    //       context.state.MenusDescription1.forEach(e2 => {
-    //         if (e1 == e2.subVariableCode) {
-    //           a[i] = e2.description
-    //         }
-    //       })
-    //     })
-
-    //     usersMenus2= Response.data.map(e => {
-    //       return e.mainNodeID2
-    //     })
-
-    //     usersMenus2.forEach((e1, i, a) => {
-    //       context.state.MenusDescription2.forEach(e2 => {
-    //         if (e1 == e2.subVariableCode) {
-    //           a[i] = e2.description
-    //         }
-    //       })
-    //     })
-
-    //     usersMenus3= Response.data.map(e => {
-    //       return e.mainNodeID3
-    //     })
-
-    //     usersMenus3.forEach((e1, i, a) => {
-    //       context.state.MenusDescription3.forEach(e2 => {
-    //         if (e1 == e2.subVariableCode) {
-    //           a[i] = e2.description
-    //         }
-    //       })
-    //     })
-
-    //     usersMenus1.forEach((e,i) => {
-    //       let a = [ e, usersMenus2[i], usersMenus3[i]]
-    //       usersMenus.push(a)
-    //     })
-
-    //     usersMenus.forEach(v => {
-    //       v.forEach((v2,i2,a2) => {
-    //         if(i2 == 0 && !(completeMenu.some((v3,i3,a3) => { return v2 === v3.title }))) {
-    //           let obj = { title: v2, subTitles: []}
-    //           completeMenu.push(obj)
-    //         }
-    //         if(i2 == 1) {
-    //           {
-    //             let index = completeMenu.findIndex(
-    //               element => element.title === a2[0]
-    //             )
-    //             let obj = {}
-    //             if (a2[2]) {
-    //               obj = { title: v2, subTitles: []}
-    //             }
-    //             else{
-    //               obj = {title: v2}
-    //             }
-    //             completeMenu[index].subTitles.push(obj)
-    //           }
-    //         }
-
-    //         if(i2 == 2 && v2) {
-    //           let obj = { title: v2}
-    //           let index1 = completeMenu.findIndex(
-    //             element => element.title === a2[0]
-    //           )
-
-    //           let index2 = completeMenu[index1].subTitles.findIndex((e,i,a) => {
-    //               return e.title === a2[1] && e.subTitles
-    //           })
-    //           completeMenu[index1].subTitles[index2].subTitles.push(obj)
-    //         }
-    //       })
-    //       context.commit("setCompleteMenu", completeMenu)
-    //     })
-    //   });
-    // },
   
     async getUsersMenus(context){
-      await axios.get(`http://localhost:5290/api/UsersMenusAccess/${context.state.userID}/${context.state.company.compNo}`)
+      let usersMenus = [], usersMenus1 = [], usersMenus2 = [], usersMenus3 = [], usersMenus4 = [], usersMenus5 = [], menusContent = [], completeMenu = []
+
+      await axios.get(`http://localhost:5290/api/UsersMenusAccess/${context.state.menuID}/${context.state.selectedCompany.compNo}`)
       .then((Response)=>{
-        conte
+        usersMenus1= Response.data.map(e => {
+          return e.description1
+        })
+
+        usersMenus2= Response.data.map(e => {
+          return e.description2
+        })
+
+        usersMenus3= Response.data.map(e => {
+          return e.description3
+        })
+        
+        usersMenus4= Response.data.map(e => {
+          return e.description4
+        })
+        
+        usersMenus5= Response.data.map(e => {
+          return e.description5
+        })
+        
+        menusContent= Response.data.map(e => {
+          return e.nodeDescription
+        })
+
+        usersMenus1.forEach((e,i) => {
+          let a = [ e, usersMenus2[i], usersMenus3[i], usersMenus4[i], usersMenus5[i], menusContent[i]]
+          usersMenus.push(a)
+        })
+        usersMenus.forEach(v => {
+          v.forEach((v2,i2,a2) => {
+            let index = completeMenu.findIndex(
+              element => element.title === a2[0]
+            )
+            if(i2 == 0 && !(completeMenu.some((v3,i3,a3) => { return v2 === v3.title }))) {
+              let obj = { title: v2, subTitles: []}
+              completeMenu.push(obj)
+            }
+            if(i2 == 1) {
+              {
+                
+                if (!(completeMenu[index].subTitles.some((v3,i3,a3) => { return v2 === v3.title }))) {
+                  let obj = {}
+                  if (a2[2]) {
+                    obj = { title: v2, subTitles: []}
+                  }
+                  else{
+                    obj = {title: v2, content: []}
+                  }
+                  completeMenu[index].subTitles.push(obj)
+                }
+              }
+            }
+
+            if(i2 == 2 && v2) {
+              let obj = { title: v2}
+
+              let index2 = completeMenu[index].subTitles.findIndex((e,i,a) => {
+                  return e.title === a2[1] && e.subTitles
+              })
+              
+              completeMenu[index].subTitles[index2].subTitles.push(obj)
+            }
+
+            if (i2 == 5) {
+              let obj = { title: v2}
+              let index2 = completeMenu[index].subTitles.findIndex((e,i,a) => {
+                return e.title === a2[1]
+              })
+              // console.log(index2);
+              completeMenu[index].subTitles[index2].content.push(obj)
+            }
+          })
+        })
+        // context.commit("setCompleteMenu", Response.data)
+        context.commit("setCompleteMenu", completeMenu)
+
       })
     },
 

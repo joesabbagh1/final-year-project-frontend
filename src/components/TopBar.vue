@@ -34,7 +34,7 @@
               </v-list-item-title>
             </v-list-item-content>
           </template>
-          <template>
+          <!-- <template>
             <v-list-group
               v-for="(subTitle,i) in item.subTitles" 
               :key="i"
@@ -56,12 +56,12 @@
                 </v-list-item-content>
               </v-list-item>
             </v-list-group>
-          </template>
-          <!-- <v-list-item v-for="subTitle in item.subTitles" :key="subTitle.title">
+          </template> -->
+          <v-list-item class="grey lighten-5 pl-10" v-for="subTitle in item.subTitles" :key="subTitle.title">
             <v-list-item-title>
               {{subTitle.title}}
             </v-list-item-title>
-          </v-list-item> -->
+          </v-list-item>
         </v-list-group>
       </v-list>
     </v-navigation-drawer>
