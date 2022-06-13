@@ -165,127 +165,128 @@
 
 <script>
 import { mapGetters, mapActions } from 'vuex'
-  export default {
-    data: () => ({
-      dialog: false,
-      dialogDelete: false,
-      headers: [
-        {	text: 'actions', value: 'actions', sortable:false, align: 'start' },
-				{	text: 'userID',value: 'userID' },
-				{ text: 'fullname', value: 'fullname' },
-				{ text: 'username', value: 'username' },
-				{ text: 'password', value: 'password' },
-				{ text: 'email', value: 'email' },
-				{ text: 'isActive', value: 'isActive' },
-      ],
-			search:'',
-      editedIndex: -1,
-      editedItem: {
-        userID: 0,
-        fullname: '',
-        username: '',
-        password: '',
-        email: '',
-				MenuID: '',
-        isActive: false,
-      },
-      defaultItem: {
-        userID: 0,
-        fullname: '',
-        username: '',
-        password: '',
-        email: '',
-        isActive: false,
-      },
-    }),
 
-    computed: {
+export default {
+	data: () => ({
+		dialog: false,
+		dialogDelete: false,
+		headers: [
+			{	text: 'actions', value: 'actions', sortable:false, align: 'start' },
+			{	text: 'userID',value: 'userID' },
+			{ text: 'fullname', value: 'fullname' },
+			{ text: 'username', value: 'username' },
+			{ text: 'password', value: 'password' },
+			{ text: 'email', value: 'email' },
+			{ text: 'isActive', value: 'isActive' },
+		],
+		search:'',
+		editedIndex: -1,
+		editedItem: {
+			userID: 0,
+			fullname: '',
+			username: '',
+			password: '',
+			email: '',
+			MenuID: '',
+			isActive: false,
+		},
+		defaultItem: {
+			userID: 0,
+			fullname: '',
+			username: '',
+			password: '',
+			email: '',
+			isActive: false,
+		},
+	}),
 
-    ...mapGetters(
-			{
-				users: "getUsers",
-				loading: "loading"
-			}),
+	computed: {
 
-      formTitle () {
-        return this.editedIndex === -1 ? 'New Item' : 'Edit Item'
-      },
-    },
+	...mapGetters(
+		{
+			users: "getUsers",
+			loading: "loading"
+		}),
 
-    watch: {
-      dialog (val) {
-        val || this.close()
-      },
-      dialogDelete (val) {
-        val || this.closeDelete()
-      },
-    },
+		formTitle () {
+			return this.editedIndex === -1 ? 'New Item' : 'Edit Item'
+		},
+	},
+
+	watch: {
+		dialog (val) {
+			val || this.close()
+		},
+		dialogDelete (val) {
+			val || this.closeDelete()
+		},
+	},
 
 
-    methods: {
-			...mapActions({
-				createUser: "createUser",
-				updateUser: "updateUser",
-				deleteUser: "deleteUser",
-			}),
+	methods: {
+		...mapActions({
+			createUser: "createUser",
+			updateUser: "updateUser",
+			deleteUser: "deleteUser",
+		}),
 
-      editItem (item) {
-        this.editedIndex = this.users.indexOf(item)
-        this.editedItem = Object.assign({}, item)
-        this.dialog = true
-      },
+		editItem (item) {
+			this.editedIndex = this.users.indexOf(item)
+			this.editedItem = Object.assign({}, item)
+			this.dialog = true
+		},
 
-      deleteItem (item) {
-        this.editedIndex = this.users.indexOf(item)
-        this.editedItem = Object.assign({}, item)
-        this.dialogDelete = true
-      },
+		deleteItem (item) {
+			this.editedIndex = this.users.indexOf(item)
+			this.editedItem = Object.assign({}, item)
+			this.dialogDelete = true
+		},
 
-      deleteItemConfirm () {
-				this.deleteUser(this.editedIndex)
-        this.closeDelete()
-      },
+		deleteItemConfirm () {
+			this.deleteUser(this.editedIndex)
+			this.closeDelete()
+		},
 
-      close () {
-        this.dialog = false
-        this.$nextTick(() => {
-          this.editedItem = Object.assign({}, this.defaultItem)
-          this.editedIndex = -1
-        })
-      },
+		close () {
+			this.dialog = false
+			this.$nextTick(() => {
+				this.editedItem = Object.assign({}, this.defaultItem)
+				this.editedIndex = -1
+			})
+		},
 
-      closeDelete () {
-        this.dialogDelete = false
-        this.$nextTick(() => {
-          this.editedItem = Object.assign({}, this.defaultItem)
-          this.editedIndex = -1
-        })
-      },
+		closeDelete () {
+			this.dialogDelete = false
+			this.$nextTick(() => {
+				this.editedItem = Object.assign({}, this.defaultItem)
+				this.editedIndex = -1
+			})
+		},
 
-      save () {
-				let editedIndex = this.editedIndex
-				let editedItem = this.editedItem
-        if (this.editedIndex > -1) {
-					this.updateUser({editedIndex, editedItem})
-        } else {
-					// let ids = this.users.map(e => {
-					// 	return e.userID
-					// })
+		save () {
+			let editedIndex = this.editedIndex
+			let editedItem = this.editedItem
+			if (this.editedIndex > -1) {
+				this.updateUser({editedIndex, editedItem})
+			} else {
+				// let ids = this.users.map(e => {
+				// 	return e.userID
+				// })
 
-					// let max = ids[0];
-					// for (let i = 1; i < ids.length; ++i) {
-					// 	if (ids[i] > max) {
-					// 		max = ids[i];
-					// 	}
-					// }
+				// let max = ids[0];
+				// for (let i = 1; i < ids.length; ++i) {
+				// 	if (ids[i] > max) {
+				// 		max = ids[i];
+				// 	}
+				// }
 
-					// this.editedItem.userID = max + 1
-          // this.users.push(this.editedItem)
-					console.log(this.editItem);
-					this.createUser(this.editedItem)
-        }
-        this.close()
-      },
-    },
-  }
+				// this.editedItem.userID = max + 1
+				// this.users.push(this.editedItem)
+				console.log(this.editItem);
+				this.createUser(this.editedItem)
+			}
+			this.close()
+		},
+	},
+}
 </script>
