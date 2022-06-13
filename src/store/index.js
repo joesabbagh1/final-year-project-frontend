@@ -78,7 +78,16 @@ export default new Vuex.Store({
     },
     setTitleSelectedContent(state, payload){
       state.titleSelectedContent = payload
-    }
+    },
+    createUser(state, payload){
+      state.users.push(payload) 
+    },
+    updateUser(state, payload){
+      Object.assign(state.users[payload.editedIndex], payload.editedItem)
+    },
+    deleteUser(state, payload){
+      state.users.splice(payload, 1)
+    },
   },
   actions: {
 
@@ -215,7 +224,46 @@ export default new Vuex.Store({
     async setTitleSelectedContent(context, data){
       let content = context.state.completeMenu[data[0]].subTitles[data[1]].content
       context.commit("setTitleSelectedContent", content)
-    }
+    },
+
+    async createUser(context, data){
+      // let ids = context.state.users.map(e => {
+      //   return e.userID
+      // })
+
+      // let maxId = ids[0];
+      // for (let i = 1; i < ids.length; ++i) {
+      //   if (ids[i] > maxId) {
+      //     maxId = ids[i];
+      //   }
+      // }
+      console.log(data);
+      await axios.post(`http://localhost:5290/api/Users/`, {
+        userID : 0,
+        fullname: data.fullname,
+        username: data.username,
+        password: data.password,
+        email: data.email,
+        MenuID: data.MenuID,
+        IsActive: true,
+      })
+      context.commit("createUser", data)
+    },
+
+    async updateUser(context, data){
+      console.log(data);
+      await axios.put(`http://localhost:5290/api/Users/${data.editedItem.userID}`, data.editedItem)
+      context.commit("updateUser", data)
+    },
+
+    async deleteUser(context, data){
+      console.log(context.state.users[data].userID);
+      await axios.delete(`http://localhost:5290/api/Users/${context.state.users[data].userID}`)
+      context.commit("deleteUser", data)
+    },
+
   },
+
+
   modules: {},
 });

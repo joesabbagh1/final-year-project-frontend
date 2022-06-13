@@ -22,82 +22,83 @@
 						<v-card>
 							<v-card-text>
 								<v-form>
-									<v-container class="pt-10">
-										<v-row align="center">
-											<v-col cols="3" class="text-subtitle-1 black--text">
-												Node ID
+									
+									<v-container fluid class="pt-10">
+										<v-row align="">
+											<v-col cols="3" >
+												<v-subheader class="text-subtitle-1 black--text px-0">
+													Node ID
+												</v-subheader>
 											</v-col>
 											<v-col class="py-0">
 												<v-text-field
 													class="py-0"
-													outlined
 													single-line
-													dense
 												></v-text-field>
 											</v-col>
 										</v-row>
 										<v-row align="center">
-											<v-col cols="3" class="text-subtitle-1 black--text py-0">
-												Application Name
+											<v-col cols="3" class="py-0">
+												<v-subheader class="text-subtitle-1 black--text px-0">
+													Application Name
+												</v-subheader>
 											</v-col>
 											<v-col class="py-0">
 												<v-text-field
 													class="py-0"
-													outlined
 													single-line
-													dense
+												></v-text-field>
+											</v-col>
+										</v-row>
+										<v-row align="center	">
+											<v-col cols="3" class="py-0">
+												<v-subheader class="text-subtitle-1 black--text px-0">
+													Application Desc EN
+												</v-subheader>
+											</v-col>
+											<v-col class="py-0">
+												<v-text-field
+													class="py-0"
+													single-line
 												></v-text-field>
 											</v-col>
 										</v-row>
 										<v-row align="center">
-											<v-col cols="3" class="text-subtitle-1 black--text py-0">
-												Application Desc EN
+											<v-col cols="3" class="py-0">
+												<v-subheader class="text-subtitle-1 black--text px-0">
+													Application Desc AR
+												</v-subheader>
 											</v-col>
 											<v-col class="py-0">
 												<v-text-field
 													class="py-0"
-													outlined
 													single-line
-													dense
 												></v-text-field>
 											</v-col>
 										</v-row>
 										<v-row align="center">
-											<v-col cols="3" class="text-subtitle-1 black--text py-0">
-												Application Desc AR
+											<v-col cols="3" class="py-0">
+												<v-subheader class="text-subtitle-1 black--text px-0">
+													Application Path
+												</v-subheader>
 											</v-col>
 											<v-col class="py-0">
 												<v-text-field
 													class="py-0"
-													outlined
 													single-line
-													dense
 												></v-text-field>
 											</v-col>
 										</v-row>
 										<v-row align="center">
-											<v-col cols="3" class="text-subtitle-1 black--text py-0">
-												Application Path
+											<v-col cols="3" class="py-0">
+												<v-subheader class="text-subtitle-1 black--text px-0">
+													Report Name
+												</v-subheader>
 											</v-col>
 											<v-col class="py-0">
 												<v-text-field
 													class="py-0"
-													outlined
 													single-line
-													dense
-												></v-text-field>
-											</v-col>
-										</v-row>
-										<v-row align="center">
-											<v-col cols="3" class="text-subtitle-1 black--text py-0">
-												Report Name
-											</v-col>
-											<v-col class="py-0">
-												<v-text-field
-													class="py-0"
-													outlined
-													single-line
-													dense
 												></v-text-field>
 											</v-col>
 										</v-row>
@@ -124,10 +125,12 @@
 									</v-tab>
 									<v-tabs-items v-model="tab">
 										<v-tab-item>
-											<v-container>
-												<v-row align="center">
-													<v-col cols="2" class="text-subtitle-1 black--text">
-														SQL Query
+											<v-container fluid class="pt-10">
+												<v-row align="start">
+													<v-col cols="3" class="py-0">
+														<v-subheader class="text-subtitle-1 black--text px-0">
+															SQL Query
+														</v-subheader>
 													</v-col>
 													<v-col>
 														<v-textarea
@@ -136,77 +139,63 @@
 													</v-col>
 												</v-row>
 												<v-row>
-													<v-col cols="8">
-														<v-row align="center">
-															<v-col cols="3" class="text-subtitle-1 black--text">
-																Tree Menu Level 01
-															</v-col>
-															<v-col class="py-0">
-																<v-select
-																	outlined
-																	single-line
-																	dense
-																></v-select>
-															</v-col>
-														</v-row>
-														<v-row align="center">
-															<v-col cols="3" class="text-subtitle-1 black--text">
-																Tree Menu Level 02
-															</v-col>
-															<v-col class="py-0">
-																<v-select
-																	outlined
-																	single-line
-																	dense
-																></v-select>
-															</v-col>
-														</v-row>
-														<v-row align="center">
-															<v-col cols="3" class="text-subtitle-1 black--text">
-																Tree Menu Level 03
-															</v-col>
-															<v-col class="py-0">
-																<v-select
-																	outlined
-																	single-line
-																	dense
-																></v-select>
-															</v-col>
-														</v-row>
-														<v-row align="center">
-															<v-col cols="3" class="text-subtitle-1 black--text">
-																Tree Menu Level 04
-															</v-col>
-															<v-col class="py-0">
-																<v-select
-																	outlined
-																	single-line
-																	dense
-																></v-select>
-															</v-col>
-														</v-row>
-														<v-row align="center">
-															<v-col cols="3" class="text-subtitle-1 black--text">
-																Tree Menu Level 05
-															</v-col>
-															<v-col class="py-0">
-																<v-select
-																	outlined
-																	single-line
-																	dense
-																></v-select>
-															</v-col>
-														</v-row>
+													<v-col cols="3" >
+														<v-subheader class="text-subtitle-1 black--text px-0">
+															Tree Menu Level 01
+														</v-subheader>
 													</v-col>
-													<v-col cols="4">
-														<v-row>
-															<v-col cols="8">
-
-															</v-col>
-															<v-col cols="4">
-
-															</v-col>
-														</v-row>
+													<v-col class="py-0">
+														<v-select
+															single-line
+														></v-select>
+													</v-col>
+												</v-row>
+												<v-row align="center">
+													<v-col cols="3" class="py-0">
+														<v-subheader class="text-subtitle-1 black--text px-0">
+															Tree Menu Level 02
+														</v-subheader>
+													</v-col>
+													<v-col class="py-0">
+														<v-select
+															single-line
+														></v-select>
+													</v-col>
+												</v-row>
+												<v-row align="center">
+													<v-col cols="3" class="py-0">
+														<v-subheader class="text-subtitle-1 black--text px-0">
+															Tree Menu Level 03
+														</v-subheader>
+													</v-col>
+													<v-col class="py-0">
+														<v-select
+															single-line
+														></v-select>
+													</v-col>
+												</v-row>
+												<v-row align="center">
+													<v-col cols="3" class="py-0">
+														<v-subheader class="text-subtitle-1 black--text px-0">
+															Tree Menu Level 04
+														</v-subheader>
+													</v-col>
+													<v-col class="py-0">
+														<v-select
+															single-line
+														></v-select>
+													</v-col>
+												</v-row>
+												<v-row align="center">
+													<v-col cols="3" class="py-0">
+														<v-subheader class="text-subtitle-1 black--text px-0">
+															Tree Menu Level 05
+														</v-subheader>
+													</v-col>
+													<v-col class="py-0">
+														<v-select
+															single-line
+														></v-select>
 													</v-col>
 												</v-row>
 											</v-container>
@@ -220,26 +209,7 @@
 						</v-card>
 						</template>
 						<template v-if="node.nodeId === 'SYS_10004'">
-							<v-card>
-								<v-card-title>
-									<v-text-field
-										v-model="search"
-										prepend-icon="mdi-magnify"
-										label="Search"
-										single-line
-										dense
-									></v-text-field>
-								</v-card-title>
-								<v-card-text>
-									<v-data-table
-										:headers="headers"
-										:items="users"
-										dense
-										:search="search"
-										class="elevation-1"
-									></v-data-table>
-								</v-card-text>
-							</v-card>
+							<UsersTable />
 						</template>
 					</v-dialog>
 				</v-col>
@@ -250,58 +220,31 @@
 
 <script>
 import { mapActions, mapGetters } from "vuex";
+import UsersTable from "@/components/usersTable.vue";
 export default {
-  name: 'Home',
-  data(){
-		return{
-			search: '',
-			tab:'',
-			headers: [
-          {
-            text: 'userID',
-            align: 'start',
-            value: 'userID',
-          },
-          { text: 'fullname', value: 'fullname' },
-          { text: 'username', value: 'username' },
-          { text: 'password', value: 'password' },
-          { text: 'email', value: 'email' },
-          { text: 'isActive', value: 'isActive' },
-        ],
-			headers: [
-          {
-            text: 'userID',
-            align: 'start',
-            value: 'userID',
-          },
-          { text: 'fullname', value: 'fullname' },
-          { text: 'username', value: 'username' },
-          { text: 'password', value: 'password' },
-          { text: 'email', value: 'email' },
-          { text: 'isActive', value: 'isActive' },
-        ],
-      }
-		},
-
-	computed: {
-		...mapGetters(
-			{
-				users: "getUsers",
-				completeMenu: "getCompleteMenu",
-				titleSelectedContent: "getTitleSelectedContent",
-				loading: "loading"
-			})
-	},
-
-	methods: {
-		...mapActions(
-			{
-				setMenu: "getUsersMenus"
-			})
-	},
-
-	async mounted (){
-		await this.setMenu()
-	}
+    name: "Home",
+    data() {
+        return {
+            search: "",
+            tab: "",
+        };
+    },
+    computed: {
+        ...mapGetters({
+            users: "getUsers",
+            completeMenu: "getCompleteMenu",
+            titleSelectedContent: "getTitleSelectedContent",
+            loading: "loading"
+        })
+    },
+    methods: {
+        ...mapActions({
+            setMenu: "getUsersMenus"
+        })
+    },
+    async mounted() {
+        await this.setMenu();
+    },
+    components: { UsersTable }
 }
 </script>

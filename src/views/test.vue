@@ -1,16 +1,13 @@
 <template>
   <div>
-		<div class="text-pink-400">
-			ss
-		</div>
+    <UsersTable />
 	</div>
 </template>
 
 <script>
-export default {
-	data(){
-
-	}
+import UsersTable from '@/components/usersTable.vue'
+  export default {
+    components: { UsersTable }
 }
 </script>
 
