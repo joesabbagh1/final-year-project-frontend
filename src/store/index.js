@@ -21,6 +21,8 @@ export default new Vuex.Store({
     completeMenu: [],
     titleSelectedContent: [],
     nodeDescriptions: [],
+    nodesForMenuAccess: [],
+    menusForMenuAccess: [],
     loading: false
   },
   getters: {
@@ -37,6 +39,8 @@ export default new Vuex.Store({
     getCompleteMenu: state => state.completeMenu,
     getTitleSelectedContent: state => state.titleSelectedContent,
     getNodeDescriptions: state => state.nodeDescriptions,
+    getNodesForMenuAccess: state => state.nodesForMenuAccess,
+    getMenusForMenuAccess: state => state.menusForMenuAccess,
     loading: state => state.loading
   },
   mutations: {
@@ -124,7 +128,17 @@ export default new Vuex.Store({
     setNodeDescriptions5(state, payload){
       state.nodeDescriptions[4] = payload
     },
+    setNodesForMenuAccess(state, payload){
+      state.nodesForMenuAccess = payload
+    },
+    setMenusForMenuAccess(state, payload){
+      state.menusForMenuAccess = payload
+    }
   },
+
+
+
+
   actions: {
 
     async getUsers(context){
@@ -340,6 +354,17 @@ export default new Vuex.Store({
       await axios.get(`http://localhost:5290/api/VariablesDetails/nodes/5`)
       .then((Response)=>{
         context.commit("setNodeDescriptions5", Response.data)
+      })
+    },
+
+    async setDataForMenuAccess(context){
+      await axios.get('http://localhost:5290/api/Nodes/decriptions')
+      .then((Response) => {
+        context.commit("setNodesForMenuAccess", Response.data)
+      })
+      await axios.get('http://localhost:5290/api/UsersMenusAccess/main')
+      .then((Response) => {
+        context.commit("setMenusForMenuAccess", Response.data)
       })
     }
 
