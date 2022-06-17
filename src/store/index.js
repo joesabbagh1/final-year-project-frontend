@@ -20,6 +20,7 @@ export default new Vuex.Store({
     selectedCompany:{},
     completeMenu: [],
     titleSelectedContent: [],
+    nodeDescriptions: [],
     loading: false
   },
   getters: {
@@ -35,6 +36,7 @@ export default new Vuex.Store({
     getUserCompanies: state => state.userCompanies,
     getCompleteMenu: state => state.completeMenu,
     getTitleSelectedContent: state => state.titleSelectedContent,
+    getNodeDescriptions: state => state.nodeDescriptions,
     loading: state => state.loading
   },
   mutations: {
@@ -93,7 +95,7 @@ export default new Vuex.Store({
       state.users.splice(payload, 1)
     },
     setNodes(state, payload){
-      state.nodes = payload
+      state.nodes.push(payload)
     },
     getNodeById(state, payload){
       state.selectedNode = payload
@@ -106,6 +108,21 @@ export default new Vuex.Store({
     },
     deleteNode(state, payload){
       state.nodes.splice(payload, 1)
+    },
+    setNodeDescriptions1(state, payload){
+      state.nodeDescriptions[0] = payload
+    },
+    setNodeDescriptions2(state, payload){
+      state.nodeDescriptions[1] = payload
+    },
+    setNodeDescriptions3(state, payload){
+      state.nodeDescriptions[2] = payload
+    },
+    setNodeDescriptions4(state, payload){
+      state.nodeDescriptions[3] = payload
+    },
+    setNodeDescriptions5(state, payload){
+      state.nodeDescriptions[4] = payload
     },
   },
   actions: {
@@ -225,6 +242,7 @@ export default new Vuex.Store({
             }
           })
         })
+        console.log(completeMenu);
         context.commit("setCompleteMenu", completeMenu)
       })
     },
@@ -267,7 +285,6 @@ export default new Vuex.Store({
     },
 
     async deleteUser(context, data){
-      console.log(context.state.users[data].userID);
       await axios.delete(`http://localhost:5290/api/Users/${context.state.users[data].userID}`)
       context.commit("deleteUser", data)
     },
@@ -287,24 +304,46 @@ export default new Vuex.Store({
     },
     
     async createNode(context, data){
+      console.log(data);
       await axios.post(`http://localhost:5290/api/nodes/`, data)
-      context.commit("createUser", data)
+      context.commit("createNode", data)
     },
     
 
     async updateNode(context, data){
-      await axios.put(`http://localhost:5290/api/nodes/${data.editedItem.userID}`, data.editedItem)
-      context.commit("updateUser", data)
+      await axios.put(`http://localhost:5290/api/nodes/${data.nodeID}`, data)
+      context.commit("updateNode", data)
     },
 
     async deleteNode(context, data){
-      console.log(context.state.users[data].userID);
-      await axios.delete(`http://localhost:5290/api/nodes/${context.state.users[data].userID}`)
-      context.commit("deleteUser", data)
+      await axios.delete(`http://localhost:5290/api/nodes/${data}`)
+      context.commit("deleteNode", data)
     },
 
-  },
+    async setNodesDescriptions(context){
+      await axios.get(`http://localhost:5290/api/VariablesDetails/nodes/1`)
+      .then((Response)=>{
+        context.commit("setNodeDescriptions1", Response.data)
+      })
+      await axios.get(`http://localhost:5290/api/VariablesDetails/nodes/2`)
+      .then((Response)=>{
+        context.commit("setNodeDescriptions2", Response.data)
+      })
+      await axios.get(`http://localhost:5290/api/VariablesDetails/nodes/3`)
+      .then((Response)=>{
+        context.commit("setNodeDescriptions3", Response.data)
+      })
+      await axios.get(`http://localhost:5290/api/VariablesDetails/nodes/4`)
+      .then((Response)=>{
+        context.commit("setNodeDescriptions4", Response.data)
+      })
+      await axios.get(`http://localhost:5290/api/VariablesDetails/nodes/5`)
+      .then((Response)=>{
+        context.commit("setNodeDescriptions5", Response.data)
+      })
+    }
 
+  },
 
   modules: {},
 });

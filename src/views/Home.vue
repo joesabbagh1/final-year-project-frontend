@@ -18,6 +18,9 @@
 								</div>
 							</div>
 						</template>
+						<template v-if="node.nodeId === 'SYS_10001'">
+							<MenuAccess />
+						</template>
 						<template v-if="node.nodeId === 'SYS_10002'">
 							<node-form />
 						</template>
@@ -35,8 +38,15 @@
 import { mapActions, mapGetters } from "vuex";
 import UsersTable from "@/components/usersTable.vue";
 import NodeForm from '@/components/NodeForm.vue';
+import MenuAccess from '@/components/MenuAccess.vue';
 export default {
     name: "Home",
+
+		data(){
+			return{
+
+			}
+		},
     
     computed: {
         ...mapGetters({
@@ -54,6 +64,6 @@ export default {
     async mounted() {
         await this.setMenu();
     },
-    components: { UsersTable, NodeForm }
+    components: { UsersTable, NodeForm, MenuAccess }
 }
 </script>
