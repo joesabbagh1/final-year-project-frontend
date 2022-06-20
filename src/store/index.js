@@ -7,6 +7,7 @@ Vue.use(Vuex);
 export default new Vuex.Store({
   state: {
     users: [],
+    variableDetails: [],
     nodes: [],
     selectedNode: {},
     username: '',
@@ -28,6 +29,7 @@ export default new Vuex.Store({
   },
   getters: {
     getUsers: state => state.users,
+    getVariableDetails: state => state.variableDetails,
     getUsername: state => state.username,
     getFullname: state => state.fullname,
     getPassword: state => state.password,
@@ -49,6 +51,9 @@ export default new Vuex.Store({
   mutations: {
     setUsers(state, payload){
       state.users = payload;
+    },
+    setVariableDetails(state, payload){
+      state.variableDetails = payload
     },
     setUserName(state, payload){
       state.username = payload;
@@ -181,6 +186,13 @@ export default new Vuex.Store({
         context.commit("setLoading", false)
       });
     },
+
+    async setVariableDetails(context){
+      axios.get('http://localhost:5290/api/VariablesDetails')
+      .then((Response) => {
+        context.commit("setVariableDetails", Response.data)
+      })
+    },
   
     async getUsersMenus(context){
       let usersMenus = [], usersMenus1 = [], usersMenus2 = [], usersMenus3 = [], usersMenus4 = [], usersMenus5 = [], menusContent = [], nodeId = [], completeMenu = []
@@ -284,16 +296,6 @@ export default new Vuex.Store({
     },
 
     async createUser(context, data){
-      // let ids = context.state.users.map(e => {
-      //   return e.userID
-      // })
-
-      // let maxId = ids[0];
-      // for (let i = 1; i < ids.length; ++i) {
-      //   if (ids[i] > maxId) {
-      //     maxId = ids[i];
-      //   }
-      // }
       data.userID = 0
       await axios.post(`http://localhost:5290/api/Users/`, data)
       context.commit("createUser", data)
@@ -308,6 +310,21 @@ export default new Vuex.Store({
       await axios.delete(`http://localhost:5290/api/Users/${context.state.users[data].userID}`)
       context.commit("deleteUser", data)
     },
+    // async createUser(context, data){
+    //   data.userID = 0
+    //   await axios.post(`http://localhost:5290/api/Users/`, data)
+    //   context.commit("createUser", data)
+    // },
+
+    // async updateUser(context, data){
+    //   await axios.put(`http://localhost:5290/api/Users/${data.editedItem.userID}`, data.editedItem)
+    //   context.commit("updateUser", data)
+    // },
+
+    // async deleteUser(context, data){
+    //   await axios.delete(`http://localhost:5290/api/Users/${context.state.users[data].userID}`)
+    //   context.commit("deleteUser", data)
+    // },
 
     async getNodes(context){
       await axios.get("http://localhost:5290/api/nodes")

@@ -27,6 +27,9 @@
 						<template v-if="node.nodeId === 'SYS_10004'">
 							<UsersTable />
 						</template>
+						<template v-if="node.nodeId === 'SYS_10007'">
+							<variable-details />
+						</template>
 					</v-dialog>
 				</v-col>
 			</v-row>
@@ -39,6 +42,7 @@ import { mapActions, mapGetters } from "vuex";
 import UsersTable from "@/components/usersTable.vue";
 import NodeForm from '@/components/NodeForm.vue';
 import MenuAccess from '@/components/MenuAccess.vue';
+import VariableDetails from '@/components/VariableDetails.vue';
 export default {
     name: "Home",
 
@@ -64,6 +68,6 @@ export default {
     async mounted() {
         await this.setMenu();
     },
-    components: { UsersTable, NodeForm, MenuAccess }
+    components: { UsersTable, NodeForm, MenuAccess, VariableDetails }
 }
 </script>
