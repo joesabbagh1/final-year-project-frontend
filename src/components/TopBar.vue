@@ -71,11 +71,13 @@
               </v-list-item>
             </v-list-group>
           </template> -->
-          <v-list-item class="grey lighten-5 pl-10" v-for="(subTitle, index2) in item.subTitles" :key="subTitle.title"  @click.stop="displayContent(index1, index2); toggleDrawer()" style="cursor: pointer;">
-            <v-list-item-title>
-              {{subTitle.title}}
-            </v-list-item-title>
-          </v-list-item>
+          <template v-if="item.subTitles">
+            <v-list-item class="grey lighten-5 pl-10" v-for="(subTitle, index2) in item.subTitles" :key="subTitle.title"  @click.stop="displayContent(index1, index2); toggleDrawer()" style="cursor: pointer;">
+              <v-list-item-title>
+                {{subTitle.title}}
+              </v-list-item-title>
+            </v-list-item>
+          </template>
         </v-list-group>
       </v-list>
     </v-navigation-drawer>

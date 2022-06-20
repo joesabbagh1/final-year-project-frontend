@@ -41,13 +41,12 @@
             </span>
           </div>
 				</template>
-        <template v-slot:[`item.access`]="{ item, i }">
-          <div>
-            <v-checkbox
-              @click="setNodeID(item,i)"
-            >
-            </v-checkbox>
-          </div>
+        <template v-slot:[`item.nodesMenuAccess`]="{ item }">
+          <v-checkbox
+            v-model="item.access"
+          >
+
+          </v-checkbox>
 				</template>
       </v-data-table>
     </v-card-text>
@@ -67,7 +66,7 @@ export default {
         { text: 'path', value: 'path' },
         { text: 'descriptionEN', value: 'nodeDescription1' },
         { text: 'descriptionAR', value: 'nodeDescription2' },
-        { text: 'access', value: 'access' },
+        { text: 'access', value: 'nodesMenuAccess' },
       ],
     }
   },
@@ -79,27 +78,34 @@ export default {
   computed:{
     ...mapGetters({
       nodes : "getNodesForMenuAccess",
-      menus: "getMenusForMenuAccess"
+      menus: "getMenusForMenuAccess",
+      nodesMenuAccess: "getNodesMenuAccess"
     }),
 
     menusTitles(){
       return this.menus.map(v => {return v.description})
+    },
+
+    checkAccess(){
+      return !"ddssssfds"
     }
   },
 
   methods:{
     ...mapActions({
-			setDataForMenuAccess : "setDataForMenuAccess"
+			setDataForMenuAccess : "setDataForMenuAccess",
+      setNodesMenuAccess: "setNodesMenuAccess"
 		}),
 
     setMenuID(){
-      this.menuID = this.menusTitles.indexOf(this.selectedMenu)
+      let index = this.menusTitles.indexOf(this.selectedMenu)
+      this.menuID = this.menus[index].subVariableCode;
+      this.setNodesMenuAccess(this.menuID)
+      this.nodes.forEach((v, i) => {
+        v.access = this.nodesMenuAccess[i]
+        console.log(v.access);
+      })
     },
-
-    setNodeID(node,i){
-      console.log(i);
-      this.nodeID = node.nodeID
-    }
   }
 
 }

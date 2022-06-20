@@ -23,6 +23,7 @@ export default new Vuex.Store({
     nodeDescriptions: [],
     nodesForMenuAccess: [],
     menusForMenuAccess: [],
+    nodesMenuAccess: [],
     loading: false
   },
   getters: {
@@ -36,11 +37,13 @@ export default new Vuex.Store({
     getUserID: state => state.userID,
     getMenuID: state => state.menuID,
     getUserCompanies: state => state.userCompanies,
+    getSelectedCompany: state => state.selectedCompany,
     getCompleteMenu: state => state.completeMenu,
     getTitleSelectedContent: state => state.titleSelectedContent,
     getNodeDescriptions: state => state.nodeDescriptions,
     getNodesForMenuAccess: state => state.nodesForMenuAccess,
     getMenusForMenuAccess: state => state.menusForMenuAccess,
+    getNodesMenuAccess: state => state.nodesMenuAccess,
     loading: state => state.loading
   },
   mutations: {
@@ -133,6 +136,9 @@ export default new Vuex.Store({
     },
     setMenusForMenuAccess(state, payload){
       state.menusForMenuAccess = payload
+    },
+    setNodesMenuAccess(state, payload){
+      state.nodesMenuAccess = payload
     }
   },
 
@@ -366,8 +372,20 @@ export default new Vuex.Store({
       .then((Response) => {
         context.commit("setMenusForMenuAccess", Response.data)
       })
-    }
+    },
 
+    async setNodesMenuAccess(context, data){
+      console.log(context.state.selectedCompany.compNo);
+      console.log(data);
+      await axios.get(`http://localhost:5290/api/MenuAccess/${context.state.selectedCompany.compNo}/${data}`)
+      .then((Response) => {
+        context.commit("setNodesMenuAccess", Response.data)
+      })
+    },
+
+    async createMenuAccess(context){
+      axios.post()
+    }
   },
 
   modules: {},
