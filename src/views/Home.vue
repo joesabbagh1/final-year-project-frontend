@@ -18,6 +18,9 @@
 								</div>
 							</div>
 						</template>
+						<template v-if="node.nodeId === 'SF_10016'">
+							<sales-rep />
+						</template>
 						<template v-if="node.nodeId === 'SYS_10001'">
 							<MenuAccess />
 						</template>
@@ -43,6 +46,7 @@ import UsersTable from "@/components/usersTable.vue";
 import NodeForm from '@/components/NodeForm.vue';
 import MenuAccess from '@/components/MenuAccess.vue';
 import VariableDetails from '@/components/VariableDetails.vue';
+import SalesRep from '@/components/SalesRep.vue';
 export default {
     name: "Home",
 
@@ -68,6 +72,6 @@ export default {
     async mounted() {
         await this.setMenu();
     },
-    components: { UsersTable, NodeForm, MenuAccess, VariableDetails }
+    components: { UsersTable, NodeForm, MenuAccess, VariableDetails, SalesRep }
 }
 </script>

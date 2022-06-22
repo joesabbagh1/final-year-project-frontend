@@ -25,6 +25,7 @@ export default new Vuex.Store({
     nodesForMenuAccess: [],
     menusForMenuAccess: [],
     nodesMenuAccess: [],
+    salesReps: [],
     loading: false
   },
   getters: {
@@ -46,6 +47,7 @@ export default new Vuex.Store({
     getNodesForMenuAccess: state => state.nodesForMenuAccess,
     getMenusForMenuAccess: state => state.menusForMenuAccess,
     getNodesMenuAccess: state => state.nodesMenuAccess,
+    getSalesReps: state => state.salesReps,
     loading: state => state.loading
   },
   mutations: {
@@ -144,6 +146,9 @@ export default new Vuex.Store({
     },
     setNodesMenuAccess(state, payload){
       state.nodesMenuAccess = payload
+    },
+    setSalesReps(state, payload){
+      state.salesReps = payload
     }
   },
 
@@ -402,6 +407,13 @@ export default new Vuex.Store({
 
     async createMenuAccess(context){
       axios.post()
+    },
+
+    async setSalesReps(context){
+      axios.get('http://localhost:5290/api/SalesReps')
+      .then((Response) => {
+        context.commit("setSalesReps", Response.data)
+      })
     }
   },
 
