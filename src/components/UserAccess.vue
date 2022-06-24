@@ -17,7 +17,7 @@
         {{company.description}}
       </div>
       <v-select 
-        v-if="accessType == branch"
+        v-if="accessType !== companies"
         :items="usersAccessTitles"
         v-model="selectedTitle"
         @input="checkUsersAccess"
@@ -87,7 +87,7 @@ export default {
       await this.checkUsersAccessStore({accessType, accessVariable})
       this.checkUsersAccess()
     }
-    if (this.accessType == this.branch) {
+    if (this.accessType !== this.companies) {
       await this.setMenuAccessTitles(this.accessType)
     }
   },

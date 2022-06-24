@@ -36,6 +36,9 @@
 						<template v-if="node.nodeId === 'SYS_10006'">
 							<user-access :accessType="'UA0006'" />
 						</template>
+						<template v-if="node.nodeId === 'SYS_10009'">
+							<user-access :accessType="'UA0009'" />
+						</template>
 						<template v-if="node.nodeId === 'SYS_10007'">
 							<variable-details />
 						</template>
