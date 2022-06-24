@@ -50,17 +50,17 @@
       </v-data-table>
     </v-card-text>
     <v-card-text v-else>
-    <v-container>
-      <v-row justify="center" align="center" style="height:70vh">
-        <v-col align="center">
-          <v-progress-circular
-            indeterminate
-            color="primary"
-            class="text-center fill-height"
-          ></v-progress-circular>
-        </v-col>
-      </v-row>
-    </v-container>
+      <v-container>
+        <v-row justify="center" align="center" style="height:70vh">
+          <v-col align="center">
+            <v-progress-circular
+              indeterminate
+              color="primary"
+              class="text-center fill-height"
+            ></v-progress-circular>
+          </v-col>
+        </v-row>
+      </v-container>
     </v-card-text>
   </v-card>
 </template>
@@ -84,7 +84,6 @@ export default {
   },
 
   async created(){
-    
     await this.setDataForMenuAccess()
   },
 

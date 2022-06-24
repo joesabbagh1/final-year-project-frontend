@@ -30,6 +30,9 @@
 						<template v-if="node.nodeId === 'SYS_10004'">
 							<UsersTable />
 						</template>
+						<template v-if="node.nodeId === 'SYS_10005'">
+							<user-access />
+						</template>
 						<template v-if="node.nodeId === 'SYS_10007'">
 							<variable-details />
 						</template>
@@ -47,6 +50,7 @@ import NodeForm from '@/components/NodeForm.vue';
 import MenuAccess from '@/components/MenuAccess.vue';
 import VariableDetails from '@/components/VariableDetails.vue';
 import SalesRep from '@/components/SalesRep.vue';
+import UserAccess from '@/components/UserAccess.vue';
 export default {
     name: "Home",
 
@@ -72,6 +76,6 @@ export default {
     async mounted() {
         await this.setMenu();
     },
-    components: { UsersTable, NodeForm, MenuAccess, VariableDetails, SalesRep }
+    components: { UsersTable, NodeForm, MenuAccess, VariableDetails, SalesRep, UserAccess }
 }
 </script>

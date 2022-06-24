@@ -25,6 +25,7 @@ export default new Vuex.Store({
     nodesForMenuAccess: [],
     menusForMenuAccess: [],
     nodesMenuAccess: [],
+    usersAccess: [],
     salesReps: [],
     loading: false
   },
@@ -47,6 +48,7 @@ export default new Vuex.Store({
     getNodesForMenuAccess: state => state.nodesForMenuAccess,
     getMenusForMenuAccess: state => state.menusForMenuAccess,
     getNodesMenuAccess: state => state.nodesMenuAccess,
+    getUsersAccess: state => state.usersAccess,
     getSalesReps: state => state.salesReps,
     getLoading: state => state.loading
   },
@@ -148,7 +150,9 @@ export default new Vuex.Store({
     setNodesMenuAccess(state, payload){
       state.nodesMenuAccess = payload
     },
-
+    checkUsersAccess(state, payload){
+      state.usersAccess = payload
+    },
     setSalesReps(state, payload){
       state.salesReps = payload
     }
@@ -424,8 +428,24 @@ export default new Vuex.Store({
       .then((Response) => {
         context.commit("setSalesReps", Response.data)
       })
+    },
+
+    async checkUsersAccess(context, data){
+      await axios.get(`http://localhost:5290/api/UsersAccess/${data.accessType}/${data.accessVariable}`)
+      .then((Response) => {
+        context.commit("checkUsersAccess", Response.data)
+      })
+    },
+
+    async createUserAccess(context, data){
+      console.log(data);
+      await axios.post('http://localhost:5290/api/UsersAccess/', data)
+    },
+
+    async deleteUserAccess(context, data){
+      await axios.delete(`http://localhost:5290/api/UsersAccess/${data.userID}/${data.accessType}/${data.accessVariable1}/${data.compNo}`)
     }
   },
 
-  modules: {},
+  modules: {},  
 });
