@@ -13,7 +13,7 @@
         class="px-10 py-0"
       ></v-select>
     </v-card-title>
-    <v-card-text>
+    <v-card-text v-if="!loading">
       <v-data-table
         :headers="headers"
         :items="nodes"
@@ -22,10 +22,10 @@
         <template v-slot:[`item.path`]="{ item }">
 					<div>
             <span>
-              {{item.mainNodeID1}} / 
+              {{ item.mainNodeID1 }} /
             </span>
             <span>
-              {{item.mainNodeID2}} 
+              {{ item.mainNodeID2 }}
             </span>
             <span v-if="item.mainNodeID3">/</span>
             <span>
@@ -41,14 +41,26 @@
             </span>
           </div>
 				</template>
-        <template v-slot:[`item.nodesMenuAccess`]="{ item }">
+        <template v-slot:[`item.access`]="{ item }">
           <v-checkbox
             v-model="item.access"
-          >
-
-          </v-checkbox>
+            @change="checkBox(item)"
+          />
 				</template>
       </v-data-table>
+    </v-card-text>
+    <v-card-text v-else>
+    <v-container>
+      <v-row justify="center" align="center" style="height:70vh">
+        <v-col align="center">
+          <v-progress-circular
+            indeterminate
+            color="primary"
+            class="text-center fill-height"
+          ></v-progress-circular>
+        </v-col>
+      </v-row>
+    </v-container>
     </v-card-text>
   </v-card>
 </template>
@@ -66,12 +78,13 @@ export default {
         { text: 'path', value: 'path' },
         { text: 'descriptionEN', value: 'nodeDescription1' },
         { text: 'descriptionAR', value: 'nodeDescription2' },
-        { text: 'access', value: 'nodesMenuAccess' },
+        { text: 'access', value: 'access' },
       ],
     }
   },
 
   async created(){
+    
     await this.setDataForMenuAccess()
   },
 
@@ -79,33 +92,55 @@ export default {
     ...mapGetters({
       nodes : "getNodesForMenuAccess",
       menus: "getMenusForMenuAccess",
-      nodesMenuAccess: "getNodesMenuAccess"
+      nodesMenuAccess: "getNodesMenuAccess",
+      company: "getSelectedCompany",
+      loading: "getLoading"
     }),
 
     menusTitles(){
       return this.menus.map(v => {return v.description})
     },
 
-    checkAccess(){
-      return !"ddssssfds"
-    }
   },
 
   methods:{
     ...mapActions({
 			setDataForMenuAccess : "setDataForMenuAccess",
-      setNodesMenuAccess: "setNodesMenuAccess"
+      setNodesMenuAccess: "setNodesMenuAccess",
+      createMenuAccess: "createMenuAccess",
+      deleteMenuAccess: "deleteMenuAccess",
+      setLoading: "setLoading",
 		}),
 
-    setMenuID(){
+    async setMenuID(){
+      this.setLoading(true)
       let index = this.menusTitles.indexOf(this.selectedMenu)
       this.menuID = this.menus[index].subVariableCode;
-      this.setNodesMenuAccess(this.menuID)
+      await this.setNodesMenuAccess(this.menuID)
       this.nodes.forEach((v, i) => {
         v.access = this.nodesMenuAccess[i]
-        console.log(v.access);
       })
+      setTimeout(() => {
+        this.setLoading(false)
+      }, 500);
     },
+
+    checkBox(val){
+      let menuAccess = {}
+      menuAccess.nodeID = val.nodeID 
+      menuAccess.menuID = parseInt(this.menuID)
+      menuAccess.compNo = parseInt(this.company.compNo)
+      if (val.access) {
+        // create
+        this.createMenuAccess(menuAccess)
+        console.log(menuAccess);
+      }
+      else{
+        // delete
+        console.log(menuAccess);
+        this.deleteMenuAccess(menuAccess)
+      }
+    }
   }
 
 }

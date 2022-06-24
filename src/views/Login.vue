@@ -174,7 +174,7 @@ export default {
 
       setSelectedCompany(){
         let index = this.userCompanies.findIndex(company => company.description == this.company.description)
-        this.company.compNo = this.userCompanies[index].subVariableCode
+        this.company.compNo = this.userCompanies[index].compNo
         this.$store.dispatch('setSelectedCompany', this.company)
       },
 

@@ -48,8 +48,9 @@ export default new Vuex.Store({
     getMenusForMenuAccess: state => state.menusForMenuAccess,
     getNodesMenuAccess: state => state.nodesMenuAccess,
     getSalesReps: state => state.salesReps,
-    loading: state => state.loading
+    getLoading: state => state.loading
   },
+  
   mutations: {
     setUsers(state, payload){
       state.users = payload;
@@ -147,6 +148,7 @@ export default new Vuex.Store({
     setNodesMenuAccess(state, payload){
       state.nodesMenuAccess = payload
     },
+
     setSalesReps(state, payload){
       state.salesReps = payload
     }
@@ -184,6 +186,10 @@ export default new Vuex.Store({
 
     },
 
+    async setLoading(context, data){
+      context.commit("setLoading", data)
+    },
+
     async setUserCompanies(context){
       await axios.get(`http://localhost:5290/api/UsersCompaniesAccess/${context.state.userID}`)
       .then((Response)=>{
@@ -201,7 +207,7 @@ export default new Vuex.Store({
   
     async getUsersMenus(context){
       let usersMenus = [], usersMenus1 = [], usersMenus2 = [], usersMenus3 = [], usersMenus4 = [], usersMenus5 = [], menusContent = [], nodeId = [], completeMenu = []
-
+      console.log(context.state.selectedCompany);
       await axios.get(`http://localhost:5290/api/UsersMenusAccess/${context.state.menuID}/${context.state.selectedCompany.compNo}`)
       .then((Response)=>{
         usersMenus1= Response.data.map(e => {
@@ -260,15 +266,15 @@ export default new Vuex.Store({
               }
             }
 
-            if(i2 == 2 && v2) {
-              let obj = { title: v2}
+            // if(i2 == 2 && v2) {
+            //   let obj = { title: v2}
 
-              let index2 = completeMenu[index].subTitles.findIndex((e,i,a) => {
-                  return e.title === a2[1] && e.subTitles
-              })
+            //   let index2 = completeMenu[index].subTitles.findIndex((e,i,a) => {
+            //       return e.title === a2[1] && e.subTitles
+            //   })
               
-              completeMenu[index].subTitles[index2].subTitles.push(obj)
-            }
+            //   completeMenu[index].subTitles[index2].subTitles.push(obj)
+            // }
 
             if (i2 == 5) {
               let obj = { title: v2, nodeId: a2[6]}
@@ -397,16 +403,20 @@ export default new Vuex.Store({
     },
 
     async setNodesMenuAccess(context, data){
-      console.log(context.state.selectedCompany.compNo);
-      console.log(data);
       await axios.get(`http://localhost:5290/api/MenuAccess/${context.state.selectedCompany.compNo}/${data}`)
       .then((Response) => {
         context.commit("setNodesMenuAccess", Response.data)
       })
     },
 
-    async createMenuAccess(context){
-      axios.post()
+    async createMenuAccess(context, data){
+      axios.post('http://localhost:5290/api/MenuAccess', data)
+      context.commit("setNodes", data)
+    },
+
+    async deleteMenuAccess(context, data){
+      axios.delete(`http://localhost:5290/api/MenuAccess/${data.nodeID}/${data.menuID}/${data.compNo}`)
+      context.dispatch("getNodes")
     },
 
     async setSalesReps(context){
