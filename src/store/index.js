@@ -26,6 +26,7 @@ export default new Vuex.Store({
     menusForMenuAccess: [],
     nodesMenuAccess: [],
     usersAccess: [],
+    accessTitles: [],
     salesReps: [],
     loading: false
   },
@@ -49,6 +50,7 @@ export default new Vuex.Store({
     getMenusForMenuAccess: state => state.menusForMenuAccess,
     getNodesMenuAccess: state => state.nodesMenuAccess,
     getUsersAccess: state => state.usersAccess,
+    getUsersAccessTitles: state => state.accessTitles,
     getSalesReps: state => state.salesReps,
     getLoading: state => state.loading
   },
@@ -152,6 +154,9 @@ export default new Vuex.Store({
     },
     checkUsersAccess(state, payload){
       state.usersAccess = payload
+    },
+    setMenuAccessTitles(state, payload){
+      state.accessTitles = payload
     },
     setSalesReps(state, payload){
       state.salesReps = payload
@@ -444,6 +449,14 @@ export default new Vuex.Store({
 
     async deleteUserAccess(context, data){
       await axios.delete(`http://localhost:5290/api/UsersAccess/${data.userID}/${data.accessType}/${data.accessVariable1}/${data.compNo}`)
+    },
+
+    async setMenuAccessTitles(context, data){
+      await axios.get(`http://localhost:5290/api/UsersAccess/${data}`)
+      .then((Response) => {
+        let titles = [...new Set(Response.data.map(item => item.accessVariable1))]
+        context.commit("setMenuAccessTitles", titles)
+      })
     }
   },
 

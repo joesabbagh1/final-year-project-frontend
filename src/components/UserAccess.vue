@@ -2,8 +2,28 @@
   <v-card>
     <v-card-title>
       <div>
-        User Access - Companies
+        User Access - 
+        <span v-if="accessType == companies">
+          Companies
+        </span>
+        <span v-if="accessType == branch">
+          Branch
+        </span>
+        <span v-if="accessType == salesRepGroups">
+          SalesRep Groups
+        </span>
       </div>
+      <div v-if="accessType == companies" class="ml-16">
+        {{company.description}}
+      </div>
+      <v-select 
+        v-if="accessType == branch"
+        :items="usersAccessTitles"
+        v-model="selectedTitle"
+        @input="checkUsersAccess"
+        class="pl-7"
+      >
+      </v-select>
     </v-card-title>
     <v-card-text v-if="!loading">
       <v-data-table
@@ -38,10 +58,13 @@
 <script>
 import { mapActions, mapGetters } from 'vuex'
 export default {
-
+  props: ['accessType'],
   data(){
     return{
-      accessType: 'UA0000',
+      companies: 'UA0000',
+      branch: 'UA0006',
+      salesRepGroups: 'UA0009',
+      selectedTitle: '',
       headers: [
         {	text: 'userID',value: 'userID' },
         { text: 'fullname', value: 'fullname' },
@@ -55,17 +78,26 @@ export default {
   },
 
   async mounted(){
-    let accessType = this.accessType
-    let accessVariable = this.company.compNo
-    await this.checkUsersAccessStore({accessType, accessVariable})
-    this.checkUsersAccess()
+    if (this.accessType == this.companies) {
+      let accessType = this.accessType
+      let accessVariable = ''
+      if (accessType == this.company) {
+        accessVariable = this.company.compNo
+      }
+      await this.checkUsersAccessStore({accessType, accessVariable})
+      this.checkUsersAccess()
+    }
+    if (this.accessType == this.branch) {
+      await this.setMenuAccessTitles(this.accessType)
+    }
   },
 
   computed:{
     ...mapGetters({
-      users: "getUsers",
       company: "getSelectedCompany",
+      users: "getUsers",
       usersAccess: "getUsersAccess",
+      usersAccessTitles: "getUsersAccessTitles",
       loading: "getLoading"
     }),
 
@@ -76,11 +108,18 @@ export default {
       checkUsersAccessStore: "checkUsersAccess",
       setLoading: "setLoading",
       createUserAccess: "createUserAccess",
-      deleteUserAccess: "deleteUserAccess"
+      deleteUserAccess: "deleteUserAccess",
+      setMenuAccessTitles: "setMenuAccessTitles",
 		}),
 
     async checkUsersAccess(){
       this.setLoading(true)
+      if(this.accessType !== this.companies){
+        let accessType = this.accessType
+        let accessVariable = this.selectedTitle
+        console.log(accessVariable);
+        await this.checkUsersAccessStore({accessType, accessVariable})
+      }
       this.users.forEach((v1,i,a) => {
         v1.access = false
         this.usersAccess.forEach((v2, i2) => {
