@@ -1,14 +1,17 @@
 <template>
-	<v-card>
-		<v-card-title>
-			<v-text-field
-				v-model="search"
-				prepend-icon="mdi-magnify"
-				label="Search"
-				single-line
-				dense
-				class="pr-10"
-			></v-text-field>
+  <v-card>
+    <v-card-title>
+      <div>
+        Variable Details
+      </div>
+      <v-select
+        v-model="selectedVariable"
+        :items="titles"
+        @input="setDetails"
+        dense
+        flat
+        class="px-10 py-0"
+      ></v-select>
 			<v-dialog
 				v-model="dialog"
 				max-width="500px"
@@ -34,8 +37,8 @@
 									md="4"
 								>
 									<v-text-field
-										v-model="editedItem.compNo"
-										label="Comp No"
+										
+										label="CompNo"
 									></v-text-field>
 								</v-col>
 								<v-col
@@ -44,8 +47,8 @@
 									md="4"
 								>
 									<v-text-field
-										v-model="editedItem.variableCode"
-										label="Variable Code"
+										
+										label="VariableCode"
 									></v-text-field>
 								</v-col>
 								<v-col
@@ -54,8 +57,8 @@
 									md="4"
 								>
 									<v-text-field
-										v-model="editedItem.subVariableCode"
-										label="Sub Variable Code"
+										
+										label="SubVariableCode"
 									></v-text-field>
 								</v-col>
 								<v-col
@@ -64,7 +67,7 @@
 									md="4"
 								>
 									<v-text-field
-										v-model="editedItem.description"
+										
 										label="Description"
 									></v-text-field>
 								</v-col>
@@ -74,8 +77,8 @@
 									md="4"
 								>
 									<v-text-field
-										v-model="editedItem.alt_Description"
-										label="Alt Description"
+										
+										label="Alt_Description"
 									></v-text-field>
 								</v-col>
 							</v-row>
@@ -112,16 +115,14 @@
 					</v-card-actions>
 				</v-card>
 			</v-dialog>
-		</v-card-title>
-		<v-card-text>
-			<v-data-table
-				:headers="headers"
-				:items="variables"
-				:search="search"
-				class="elevation-1"
-			>
-					
-				<template v-slot:[`item.actions`]="{ item }">
+    </v-card-title>
+    <v-card-text v-if="!loading">
+      <v-data-table
+        :headers="headers"
+        :items="varDetails"
+        class="elevation-1"
+      >
+        <template v-slot:[`item.actions`]="{ item }">
 					<v-icon
 						small
 						class="mr-2"
@@ -136,64 +137,57 @@
 						mdi-delete
 					</v-icon>
 				</template>
-				<template v-slot:no-data>
-					<v-btn
-						color="primary"
-						@click="initialize"
-					>
-						Reset
-					</v-btn>
-				</template>
-			</v-data-table>
-		</v-card-text>
-	</v-card>
+      </v-data-table>
+    </v-card-text>
+    <v-card-text v-else>
+      <v-container>
+        <v-row justify="center" align="center" style="height:70vh">
+          <v-col align="center">
+            <v-progress-circular
+              indeterminate
+              color="primary"
+              class="text-center fill-height"
+            ></v-progress-circular>
+          </v-col>
+        </v-row>
+      </v-container>
+    </v-card-text>
+  </v-card>
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex'
-
+import { mapActions, mapGetters } from 'vuex'
 export default {
-	data: () => ({
-		dialog: false,
-		dialogDelete: false,
-		headers: [
-			{	text: 'actions', value: 'actions', sortable:false, align: 'start' },
-			{	text: 'Comp No',value: 'compNo' },
-			{ text: 'Variable Code', value: 'variableCode' },
-			{ text: 'Sub Variable Code', value: 'subVariableCode' },
-			{ text: 'Description', value: 'description' },
-			{ text: 'Alt Description', value: 'alt_Description' },
-		],
-		search:'',
-		editedIndex: -1,
-		editedItem: {
-			CompNo: 0,
-			VariableCode: '',
-			SubVariableCode: '',
-			Description: '',
-			Alt_Description: '',
-		},
-		defaultItem: {
-			CompNo: 0,
-			VariableCode: '',
-			SubVariableCode: '',
-			Description: '',
-			Alt_Description: '',
-		},
-	}),
 
-	computed: {
-
-	...mapGetters(
-		{
-			variables: "getVariableDetails",
-			loading: "loading"
-		}),
-
-		formTitle () {
-			return this.editedIndex === -1 ? 'New Item' : 'Edit Item'
-		},
-	},
+  data(){
+    return{
+			dialog: false,
+			dialogDelete: false,
+      selectedVariable: '',
+      headers: [
+				{	text: 'actions', value: 'actions', sortable:false, align: 'start' },
+        { text: 'compNo', value: 'compNo' },
+        { text: 'VariableCode', value: 'variableCode' },
+        { text: 'SubVariableCode', value: 'subVariableCode' },
+        { text: 'Description', value: 'description' },
+        { text: 'Alt_Description', value: 'alt_Description' },
+      ],
+			editedItem: {
+				compNo: 0,
+				variableCode: '',
+				subVariableCode: '',
+				description: '',
+				alt_Description: '',
+			},
+			defaultItem: {
+				compNo: 0,
+				variableCode: '',
+				subVariableCode: '',
+				description: '',
+				alt_Description: '',
+			},
+    }
+  },
 
 	watch: {
 		dialog (val) {
@@ -204,32 +198,58 @@ export default {
 		},
 	},
 
-  mounted(){
-    this.setVariableDetails()
+  async mounted(){
+    await this.setVariableHeadersTitles(this.company.compNo)
   },
 
-	methods: {
-		...mapActions({
-      setVariableDetails: "setVariableDetails",
-			createVariable: "createVariable",
-			updateVariable: "updateVariable",
-			deleteVariable: "deleteVariable",
+  computed:{
+    ...mapGetters({
+			variableDetailsTitles: "getVariableDetailsTitles",
+			company: "getSelectedCompany",
+			varDetails: "getVariableDetailsByCode",
+      loading: "getLoading"
+    }),
+
+		titles(){
+			return this.variableDetailsTitles.map(v => {
+				return v.description
+			})
+		}
+  },
+
+  methods:{
+    ...mapActions({
+			setVariableHeadersTitles: "setVariableHeadersTitles",
+			setVariableDetailsByCode: "setVariableDetailsByCode",
+      setLoading: "setLoading",
 		}),
 
-		editItem (item) {
-			this.editedIndex = this.variables.indexOf(item)
-			this.editedItem = Object.assign({}, item)
+		setDetails(){
+			this.setLoading(true)
+			this.variableDetailsTitles.find(v => {
+				if(v.description == this.selectedVariable){
+					let compNo = this.company.compNo
+					let variableCode = v.variableCode
+					this.setVariableDetailsByCode({compNo, variableCode})
+				}
+			})
+			this.setLoading(false)
+		},
+
+    	editItem (item) {
+			// this.editedIndex = this.users.indexOf(item)
+			// this.editedItem = Object.assign({}, item)
 			this.dialog = true
 		},
 
 		deleteItem (item) {
-			this.editedIndex = this.variables.indexOf(item)
-			this.editedItem = Object.assign({}, item)
+			// this.editedIndex = this.users.indexOf(item)
+			// this.editedItem = Object.assign({}, item)
 			this.dialogDelete = true
 		},
 
 		deleteItemConfirm () {
-			this.deleteVariable(this.editedIndex)
+			this.deleteUser(this.editedIndex)
 			this.closeDelete()
 		},
 
@@ -253,7 +273,7 @@ export default {
 			let editedIndex = this.editedIndex
 			let editedItem = this.editedItem
 			if (this.editedIndex > -1) {
-				this.updateVariable({editedIndex, editedItem})
+				this.updateUser({editedIndex, editedItem})
 			} else {
 				// let ids = this.users.map(e => {
 				// 	return e.userID
@@ -269,10 +289,16 @@ export default {
 				// this.editedItem.userID = max + 1
 				// this.users.push(this.editedItem)
 				console.log(this.editItem);
-				this.createVariable(this.editedItem)
+				this.createUser(this.editedItem)
 			}
 			this.close()
 		},
-	},
+
+  }
+
 }
 </script>
+
+<style>
+
+</style>

@@ -8,9 +8,6 @@
       <v-app-bar-nav-icon @click.stop="toggleDrawer"></v-app-bar-nav-icon>
 
       <v-spacer></v-spacer>
-      <router-link to="/test">
-        test
-      </router-link>
       <div class="text-h6 font-weight-medium black--text" @click="logout()" style="cursor: pointer;">
         Log out
       <v-icon color="black" size="30">mdi-logout</v-icon>

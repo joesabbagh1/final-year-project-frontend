@@ -29,6 +29,8 @@ export default new Vuex.Store({
     accessTitlesBranch: [],
     accessTitlesSalesRepGroups: [],
     salesReps: [],
+    variableDetailsTitles: [],
+    variableDetailsByCode: [],
     loading: false
   },
   getters: {
@@ -54,6 +56,8 @@ export default new Vuex.Store({
     getUsersAccessTitlesBranch: state => state.accessTitlesBranch,
     getUsersAccessTitlesSalesRepGroups: state => state.accessTitlesSalesRepGroups,
     getSalesReps: state => state.salesReps,
+    getVariableDetailsTitles: state => state.variableDetailsTitles,
+    getVariableDetailsByCode: state => state.variableDetailsByCode,
     getLoading: state => state.loading
   },
   
@@ -165,6 +169,12 @@ export default new Vuex.Store({
     },
     setSalesReps(state, payload){
       state.salesReps = payload
+    },
+    setVariableHeadersTitles(state, payload){
+      state.variableDetailsTitles = payload
+    },
+    setVariableDetailsByCode(state, payload){
+      state.variableDetailsByCode = payload
     }
   },
 
@@ -469,6 +479,21 @@ export default new Vuex.Store({
       .then((Response) => {
         let titles = [...new Set(Response.data.map(item => item.accessVariable1))]
         context.commit("setUserAccessTitlesSalesRepGroups", titles)
+      })
+    },
+
+    async setVariableHeadersTitles(context, data){
+      await axios.get(`http://localhost:5290/api/VariableHeaders/titles/${data}`)
+      .then((Response) => {
+        context.commit("setVariableHeadersTitles", Response.data)
+      })
+    },
+
+    async setVariableDetailsByCode(context, data){
+      console.log(data);
+      await axios.get(`http://localhost:5290/api/VariablesDetails/${data.compNo}/${data.variableCode}`)
+      .then((Response) => {
+        context.commit("setVariableDetailsByCode", Response.data)
       })
     }
   },
