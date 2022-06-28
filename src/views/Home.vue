@@ -1,5 +1,5 @@
 <template>
-  <div v-if="!loading">
+  <div>
 		<v-container fluid class="mt-8">
 			<v-row align="center" justify="center">
 				<v-col cols="2" align="center" v-for="node in titleSelectedContent" :key="node.title">
@@ -11,6 +11,7 @@
 								class="py-8 elevation-1 rounded-lg text-h6"
 								v-bind="attrs"
           			v-on="on"
+								@click="refresh"
 							>
 								{{node.title}}
 								<div>
@@ -30,13 +31,13 @@
 						<template v-if="node.nodeId === 'SYS_10004'">
 							<UsersTable />
 						</template>
-						<template v-if="node.nodeId === 'SYS_10005'">
+						<template v-if="node.nodeId === 'SYS_10005' && !loading">
 							<user-access :accessType="'UA0000'" />
 						</template>
-						<template v-if="node.nodeId === 'SYS_10006'">
+						<template v-if="node.nodeId === 'SYS_10006' && !loading">
 							<user-access :accessType="'UA0006'" />
 						</template>
-						<template v-if="node.nodeId === 'SYS_10009'">
+						<template v-if="node.nodeId === 'SYS_10009' && !loading">
 							<user-access :accessType="'UA0009'" />
 						</template>
 						<template v-if="node.nodeId === 'SYS_10007'">
@@ -62,7 +63,7 @@ export default {
 
 		data(){
 			return{
-
+				loading: false
 			}
 		},
     
@@ -71,13 +72,19 @@ export default {
             users: "getUsers",
             completeMenu: "getCompleteMenu",
             titleSelectedContent: "getTitleSelectedContent",
-            loading: "loading"
         })
     },
     methods: {
         ...mapActions({
             setMenu: "getUsersMenus"
-        })
+        }),
+
+				refresh(){
+					this.loading = true
+					setTimeout(() => {
+						this.loading = false
+					}, 10);
+				}
     },
     async mounted() {
         await this.setMenu();

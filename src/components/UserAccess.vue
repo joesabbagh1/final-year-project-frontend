@@ -18,7 +18,7 @@
       </div>
       <v-select 
         v-if="accessType !== companies"
-        :items="usersAccessTitles"
+        :items="accessType == branch ? usersAccessTitlesBranch : usersAccessTitlesSalesRepGroups"
         v-model="selectedTitle"
         @input="checkUsersAccess"
         class="pl-7"
@@ -26,8 +26,11 @@
       </v-select>
     </v-card-title>
     <v-card-text v-if="!selectedTitle && accessType !== companies">
-      <div>
-        Please select a title.
+      <div v-if="accessType == branch">
+        Please select a branch.
+      </div>
+      <div v-if="accessType == salesRepGroups">
+        Please select a sales Rep Group.
       </div>
     </v-card-text>
     <v-card-text v-else-if="!loading">
@@ -82,29 +85,21 @@ export default {
     }
   },
 
-  watch:{
-    accessType:{
-      handler(news, old){
-      console.log(news, old);
-      this.setLoading(true)
-      setTimeout(() => {
-        this.setLoading(false)
-      }, 500);
-      this.setLoading(false)
-      }
-    }
-  },
 
-  async mounted(){
+  async created(){
     this.setLoading(true)
+    console.log(435);
     if (this.accessType == this.companies) {
       let accessType = this.accessType
       let accessVariable = this.company.compNo
       await this.checkUsersAccessStore({accessType, accessVariable})
       this.checkUsersAccess()
     }
-    if (this.accessType !== this.companies) {
-      await this.setMenuAccessTitles(this.accessType)
+    if (this.accessType == this.branch) {
+      await this.setUserAccessTitlesBranch()
+    }
+    if (this.accessType == this.salesRepGroups) {
+      await this.setUserAccessTitlesSalesRepGroups()
     }
     this.setLoading(true)
   },
@@ -114,7 +109,8 @@ export default {
       company: "getSelectedCompany",
       users: "getUsers",
       usersAccess: "getUsersAccess",
-      usersAccessTitles: "getUsersAccessTitles",
+      usersAccessTitlesBranch: "getUsersAccessTitlesBranch",
+      usersAccessTitlesSalesRepGroups: "getUsersAccessTitlesSalesRepGroups",
       loading: "getLoading"
     }),
 
@@ -126,7 +122,8 @@ export default {
       setLoading: "setLoading",
       createUserAccess: "createUserAccess",
       deleteUserAccess: "deleteUserAccess",
-      setMenuAccessTitles: "setMenuAccessTitles",
+      setUserAccessTitlesBranch: "setUserAccessTitlesBranch",
+      setUserAccessTitlesSalesRepGroups: "setUserAccessTitlesSalesRepGroups",
 		}),
 
     async checkUsersAccess(){
