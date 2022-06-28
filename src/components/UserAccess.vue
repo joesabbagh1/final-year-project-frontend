@@ -25,7 +25,12 @@
       >
       </v-select>
     </v-card-title>
-    <v-card-text v-if="!loading">
+    <v-card-text v-if="!selectedTitle && accessType !== companies">
+      <div>
+        Please select a title.
+      </div>
+    </v-card-text>
+    <v-card-text v-else-if="!loading">
       <v-data-table
         :headers="headers"
         :items="users"
@@ -77,19 +82,31 @@ export default {
     }
   },
 
+  watch:{
+    accessType:{
+      handler(news, old){
+      console.log(news, old);
+      this.setLoading(true)
+      setTimeout(() => {
+        this.setLoading(false)
+      }, 500);
+      this.setLoading(false)
+      }
+    }
+  },
+
   async mounted(){
+    this.setLoading(true)
     if (this.accessType == this.companies) {
       let accessType = this.accessType
-      let accessVariable = ''
-      if (accessType == this.company) {
-        accessVariable = this.company.compNo
-      }
+      let accessVariable = this.company.compNo
       await this.checkUsersAccessStore({accessType, accessVariable})
       this.checkUsersAccess()
     }
     if (this.accessType !== this.companies) {
       await this.setMenuAccessTitles(this.accessType)
     }
+    this.setLoading(true)
   },
 
   computed:{
@@ -121,17 +138,21 @@ export default {
         await this.checkUsersAccessStore({accessType, accessVariable})
       }
       this.users.forEach((v1,i,a) => {
-        v1.access = false
-        this.usersAccess.forEach((v2, i2) => {
-          if (v2.userID === v1.userID) {
-            v1.access = true
-          }
-          // v2.userID == v1.userID ? v1.access = true : v1.access = false
-        })
+        v1.access = this.usersAccess.find(v2 => v2.userID == v1.userID) ? true : false
+        // this.usersAccess.forEach((v2, i2) => {
+        //   if (v2.userID === v1.userID) {
+        //     console.log(v1);
+        //     v1.access = true
+        //   }
+        //   v2.userID == v1.userID ? v1.access = true : v1.access = false
+        // })
       })
+      setTimeout(() => {
+        this.setLoading(false)
+      }, 500);
       this.setLoading(false)
     },
-
+    
     checkBox(val){
       let userAccess = {}
       userAccess.userID = val.userID 
