@@ -37,7 +37,7 @@
 									md="4"
 								>
 									<v-text-field
-										
+										v-model="editedItem.compNo"
 										label="CompNo"
 									></v-text-field>
 								</v-col>
@@ -47,7 +47,7 @@
 									md="4"
 								>
 									<v-text-field
-										
+										v-model="editedItem.variableCode"
 										label="VariableCode"
 									></v-text-field>
 								</v-col>
@@ -57,7 +57,7 @@
 									md="4"
 								>
 									<v-text-field
-										
+										v-model="editedItem.subVariableCode"
 										label="SubVariableCode"
 									></v-text-field>
 								</v-col>
@@ -67,7 +67,7 @@
 									md="4"
 								>
 									<v-text-field
-										
+										v-model="editedItem.description"
 										label="Description"
 									></v-text-field>
 								</v-col>
@@ -77,7 +77,7 @@
 									md="4"
 								>
 									<v-text-field
-										
+										v-model="editedItem.alt_Description"
 										label="Alt_Description"
 									></v-text-field>
 								</v-col>
@@ -173,14 +173,14 @@ export default {
         { text: 'Alt_Description', value: 'alt_Description' },
       ],
 			editedItem: {
-				compNo: 0,
+				compNo: null,
 				variableCode: '',
 				subVariableCode: '',
 				description: '',
 				alt_Description: '',
 			},
 			defaultItem: {
-				compNo: 0,
+				compNo: null,
 				variableCode: '',
 				subVariableCode: '',
 				description: '',
@@ -221,6 +221,9 @@ export default {
     ...mapActions({
 			setVariableHeadersTitles: "setVariableHeadersTitles",
 			setVariableDetailsByCode: "setVariableDetailsByCode",
+			createVariable: "createVariable",
+			updateVariable: "updateVariable",
+			deleteVariable: "deleteVariable",
       setLoading: "setLoading",
 		}),
 
@@ -237,19 +240,19 @@ export default {
 		},
 
     	editItem (item) {
-			// this.editedIndex = this.users.indexOf(item)
-			// this.editedItem = Object.assign({}, item)
+			this.editedIndex = this.varDetails.indexOf(item)
+			this.editedItem = Object.assign({}, item)
 			this.dialog = true
 		},
 
 		deleteItem (item) {
-			// this.editedIndex = this.users.indexOf(item)
-			// this.editedItem = Object.assign({}, item)
+			this.editedIndex = this.varDetails.indexOf(item)
+			this.editedItem = Object.assign({}, item)
 			this.dialogDelete = true
 		},
 
 		deleteItemConfirm () {
-			this.deleteUser(this.editedIndex)
+			this.deleteVariable(this.editedIndex)
 			this.closeDelete()
 		},
 
@@ -273,23 +276,9 @@ export default {
 			let editedIndex = this.editedIndex
 			let editedItem = this.editedItem
 			if (this.editedIndex > -1) {
-				this.updateUser({editedIndex, editedItem})
+				this.updateVariable({editedIndex, editedItem})
 			} else {
-				// let ids = this.users.map(e => {
-				// 	return e.userID
-				// })
-
-				// let max = ids[0];
-				// for (let i = 1; i < ids.length; ++i) {
-				// 	if (ids[i] > max) {
-				// 		max = ids[i];
-				// 	}
-				// }
-
-				// this.editedItem.userID = max + 1
-				// this.users.push(this.editedItem)
-				console.log(this.editItem);
-				this.createUser(this.editedItem)
+				this.createVariable(this.editedItem)
 			}
 			this.close()
 		},

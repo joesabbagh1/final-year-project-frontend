@@ -495,6 +495,21 @@ export default new Vuex.Store({
       .then((Response) => {
         context.commit("setVariableDetailsByCode", Response.data)
       })
+    },
+
+    async createVariable(context, data){
+      await axios.post('http://localhost:5290/api/VariablesDetails', data)
+      context.dispatch("setVariableDetails")
+    },
+
+    async updateVariable(context, data){
+      await axios.put(`http://localhost:5290/api/VariablesDetails/${data.compNo}/${data.variableCode}/${data.subVariableCode}`, data)
+      context.dispatch("setVariableDetails")
+    },
+
+    async deleteVariable(context, data){
+      await axios.delete(`http://localhost:5290/api/VariablesDetails/${data.compNo}/${data.variableCode}/${data.subVariableCode}`)
+      context.dispatch("setVariableDetails")
     }
   },
 
