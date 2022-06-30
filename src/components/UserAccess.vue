@@ -139,7 +139,6 @@ export default {
         let accessType = this.accessType
         let accessVariable = accessType == this.branch ? this.usersAccessTitlesBranch.find(item => item.description == this.selectedTitle).subVariableCode : this.usersAccessTitlesSalesRepGroups.find(item => item.description == this.selectedTitle).subVariableCode
         this.accessVariable = accessVariable
-        console.log(accessVariable);
         await this.checkUsersAccessStore({accessType, accessVariable})
       }
       this.users.forEach((v1,i,a) => {
@@ -155,7 +154,7 @@ export default {
       let userAccess = {}
       userAccess.userID = val.userID 
       userAccess.accessType = this.accessType
-      userAccess.accessVariable1 = this.accessVariable
+      userAccess.accessVariable1 = this.accessType == this.companies ? this.company.compNo : this.accessVariable
       userAccess.compNo = 0
       if (val.access) {
         // create
