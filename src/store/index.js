@@ -463,18 +463,16 @@ export default new Vuex.Store({
     },
 
     async setUserAccessTitlesBranch(context){
-      await axios.get(`http://localhost:5290/api/UsersAccess/UA0006`)
+      await axios.get(`http://localhost:5290/api/VariablesDetails/0/BR01`)
       .then((Response) => {
-        let titles = [...new Set(Response.data.map(item => item.accessVariable1))]
-        context.commit("setUserAccessTitlesBranch", titles)
+        context.commit("setUserAccessTitlesBranch", Response.data)
       })
     },
 
     async setUserAccessTitlesSalesRepGroups(context){
-      await axios.get(`http://localhost:5290/api/UsersAccess/UA0009`)
+      await axios.get(`http://localhost:5290/api/VariablesDetails/${context.state.selectedCompany.compNo}/UTYP01`)
       .then((Response) => {
-        let titles = [...new Set(Response.data.map(item => item.accessVariable1))]
-        context.commit("setUserAccessTitlesSalesRepGroups", titles)
+        context.commit("setUserAccessTitlesSalesRepGroups", Response.data)
       })
     },
 

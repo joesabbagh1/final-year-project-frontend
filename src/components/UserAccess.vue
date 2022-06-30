@@ -18,7 +18,7 @@
       </div>
       <v-select 
         v-if="accessType !== companies"
-        :items="accessType == branch ? usersAccessTitlesBranch : usersAccessTitlesSalesRepGroups"
+        :items="accessType == branch ? titlesBranch : titlesSalesRepGroups"
         v-model="selectedTitle"
         @input="checkUsersAccess"
         class="pl-7"
@@ -73,6 +73,7 @@ export default {
       branch: 'UA0006',
       salesRepGroups: 'UA0009',
       selectedTitle: '',
+      accessVariable: '',
       headers: [
         {	text: 'userID',value: 'userID' },
         { text: 'fullname', value: 'fullname' },
@@ -113,7 +114,13 @@ export default {
       usersAccessTitlesSalesRepGroups: "getUsersAccessTitlesSalesRepGroups",
       loading: "getLoading"
     }),
-
+    
+    titlesBranch(){
+			return this.usersAccessTitlesBranch.map(item => item.description)
+		},
+    titlesSalesRepGroups(){
+			return this.usersAccessTitlesSalesRepGroups.map(item => item.description)
+		},
   },
 
   methods:{
@@ -130,19 +137,13 @@ export default {
       this.setLoading(true)
       if(this.accessType !== this.companies){
         let accessType = this.accessType
-        let accessVariable = this.selectedTitle
+        let accessVariable = accessType == this.branch ? this.usersAccessTitlesBranch.find(item => item.description == this.selectedTitle).subVariableCode : this.usersAccessTitlesSalesRepGroups.find(item => item.description == this.selectedTitle).subVariableCode
+        this.accessVariable = accessVariable
         console.log(accessVariable);
         await this.checkUsersAccessStore({accessType, accessVariable})
       }
       this.users.forEach((v1,i,a) => {
         v1.access = this.usersAccess.find(v2 => v2.userID == v1.userID) ? true : false
-        // this.usersAccess.forEach((v2, i2) => {
-        //   if (v2.userID === v1.userID) {
-        //     console.log(v1);
-        //     v1.access = true
-        //   }
-        //   v2.userID == v1.userID ? v1.access = true : v1.access = false
-        // })
       })
       setTimeout(() => {
         this.setLoading(false)
@@ -154,7 +155,7 @@ export default {
       let userAccess = {}
       userAccess.userID = val.userID 
       userAccess.accessType = this.accessType
-      userAccess.accessVariable1 = this.company.compNo
+      userAccess.accessVariable1 = this.accessVariable
       userAccess.compNo = 0
       if (val.access) {
         // create
