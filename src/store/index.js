@@ -231,7 +231,6 @@ export default new Vuex.Store({
   
     async getUsersMenus(context){
       let usersMenus = [], usersMenus1 = [], usersMenus2 = [], usersMenus3 = [], usersMenus4 = [], usersMenus5 = [], menusContent = [], nodeId = [], completeMenu = []
-      console.log(context.state.selectedCompany);
       await axios.get(`http://localhost:5290/api/UsersMenusAccess/${context.state.menuID}/${context.state.selectedCompany.compNo}`)
       .then((Response)=>{
         usersMenus1= Response.data.map(e => {
@@ -309,7 +308,6 @@ export default new Vuex.Store({
             }
           })
         })
-        console.log(completeMenu);
         context.commit("setCompleteMenu", completeMenu)
       })
     },
@@ -376,7 +374,6 @@ export default new Vuex.Store({
     },
     
     async createNode(context, data){
-      console.log(data);
       await axios.post(`http://localhost:5290/api/nodes/`, data)
       context.commit("createNode", data)
     },
@@ -458,7 +455,6 @@ export default new Vuex.Store({
     },
 
     async createUserAccess(context, data){
-      console.log(data);
       await axios.post('http://localhost:5290/api/UsersAccess/', data)
     },
 
@@ -490,7 +486,6 @@ export default new Vuex.Store({
     },
 
     async setVariableDetailsByCode(context, data){
-      console.log(data);
       await axios.get(`http://localhost:5290/api/VariablesDetails/${data.compNo}/${data.variableCode}`)
       .then((Response) => {
         context.commit("setVariableDetailsByCode", Response.data)

@@ -8,14 +8,27 @@
         :items="titles"
         v-model="selectedTitle"
         @input="checkUsersAccess"
+        dense
         class="pl-7"
       >
       </v-select>
     </v-card-title>
     <v-card-text v-if="!loading">
+      <v-row justify="end">
+        <v-col cols="3">
+          <v-text-field
+            v-model="search"
+            prepend-icon="mdi-magnify"
+            label="Search"
+            single-line
+            dense
+          ></v-text-field>
+        </v-col>
+      </v-row>
       <v-data-table
         :headers="headers"
         :items="reps"
+        :search="search"
         class="elevation-1"
       >
         <template v-slot:[`item.access`]="{ item }">
@@ -48,6 +61,7 @@ export default {
   data(){
     return{
       selectedTitle: '',
+      search: '',
       headers: [
         {	text: 'SR_ID',value: 'sR_ID' },
         { text: 'SR_Code', value: 'sR_Code' },
@@ -97,9 +111,9 @@ export default {
 			let accessVariable = this.varDetails.find(item => item.description === this.selectedTitle).subVariableCode
 			await this.checkUsersAccessStore({accessType, accessVariable})
       this.reps.forEach((v1,i,a) => {
-        v1.access = this.usersAccess.find(v2 => v2.SR_ID == v1.userID) ? true : false
+        v1.access = this.usersAccess.find(v2 =>  v2.userID == v1.sR_ID) ? true : false
+        console.log(v1.access);
       })
-			console.log(this.reps);
       setTimeout(() => {
         this.setLoading(false)
       }, 500);
