@@ -272,13 +272,15 @@ export default {
 			})
 		},
 
-		save () {
+		async save () {
 			let editedIndex = this.editedIndex
 			let editedItem = this.editedItem
 			if (this.editedIndex > -1) {
-				this.updateVariable({editedIndex, editedItem})
+				await this.updateVariable(editedItem)
+				this.setDetails()
 			} else {
-				this.createVariable(this.editedItem)
+				await this.createVariable(this.editedItem)
+				this.setDetails()
 			}
 			this.close()
 		},
