@@ -34,13 +34,12 @@
 
       <v-list>
         <v-list-group
-          :value="false"
           v-for="(item, index1) in completeMenu"
           :key="item.title"
         >
           <template v-slot:activator>
             <v-list-item-content>
-              <v-list-item-title> 
+              <v-list-item-title class=" font-weight-medium"> 
                 {{item.title}}
               </v-list-item-title>
             </v-list-item-content>
@@ -89,7 +88,6 @@ export default {
   data(){
     return {
       drawer: false,
-      titleSelectedIndex: null,
     }
   },
 

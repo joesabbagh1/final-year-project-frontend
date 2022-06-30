@@ -2,13 +2,13 @@
   <div>
 		<v-container fluid class="mt-8">
 			<v-row align="center" justify="center">
-				<v-col cols="3" align="center" v-for="node in titleSelectedContent" :key="node.title">
+				<v-col cols="3" v-for="node in titleSelectedContent" :key="node.title">
 					<v-dialog
 						width="1000"
 					>
 						<template v-slot:activator="{ on, attrs }">
 							<div 
-								class="py-8 mx-2 elevation-1 rounded-lg text-h6 border lighten-2"
+								class="py-8 px-2 mx-2 elevation-1 rounded-lg text-h6 text-center"
 								v-bind="attrs"
           			v-on="on"
 								@click="refresh"
