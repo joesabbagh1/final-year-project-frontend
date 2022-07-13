@@ -74,18 +74,8 @@
 									md="4"
 								>
 									<v-text-field
-										v-model="editedItem.MenuID"
+										v-model="editedItem.menuID"
 										label="menuId"
-									></v-text-field>
-								</v-col>
-								<v-col
-									cols="12"
-									sm="6"
-									md="4"
-								>
-									<v-text-field
-										v-model="editedItem.isActive"
-										label="isActive"
 									></v-text-field>
 								</v-col>
 							</v-row>
@@ -165,7 +155,7 @@ export default {
 			{ text: 'username', value: 'username' },
 			{ text: 'password', value: 'password' },
 			{ text: 'email', value: 'email' },
-			{ text: 'isActive', value: 'isActive' },
+			{ text: 'menuID', value: 'menuID' },
 		],
 		search:'',
 		editedIndex: -1,
@@ -175,8 +165,7 @@ export default {
 			username: '',
 			password: '',
 			email: '',
-			MenuID: '',
-			isActive: false,
+			menuID: '',
 		},
 		defaultItem: {
 			userID: 0,
@@ -184,7 +173,7 @@ export default {
 			username: '',
 			password: '',
 			email: '',
-			isActive: false,
+			MmnuID: '',
 		},
 	}),
 

@@ -40,13 +40,6 @@
                   ></v-text-field>
                 </v-col>
 
-                <v-col cols="12" class="py-0 mt-n6">
-                  <v-checkbox
-                    v-model="checkbox"
-                    label="Remeber me"
-                  ></v-checkbox>
-                </v-col>
-
                 <v-col
                   align="center"
                   cols="12"
@@ -60,7 +53,7 @@
                     login
                   </v-btn>
                 </v-col>
-                <v-col
+                <!-- <v-col
                   align="center"
                   cols="12"
                 >
@@ -72,7 +65,7 @@
                   >
                     register
                   </v-btn>
-                </v-col>
+                </v-col> -->
               </v-row>
             </v-container>
           </v-form>

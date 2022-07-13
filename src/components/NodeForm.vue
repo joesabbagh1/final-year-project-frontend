@@ -73,15 +73,6 @@
               ></v-text-field>
             </v-col>
           </v-row>
-          <v-row>
-            <v-col class="py-0" align="center">
-              <v-checkbox
-                dense
-                class="black--text"
-                label="Active"
-              ></v-checkbox>
-            </v-col>
-          </v-row>
         </v-container>
       </v-form>
       <v-divider></v-divider>

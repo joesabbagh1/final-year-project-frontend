@@ -12,19 +12,16 @@
         class="pl-7"
       >
       </v-select>
+      <v-text-field
+        v-model="search"
+        prepend-icon="mdi-magnify"
+        label="Search"
+        single-line
+        dense
+				class="px-10"
+      ></v-text-field>
     </v-card-title>
     <v-card-text v-if="!loading">
-      <v-row justify="end">
-        <v-col cols="3">
-          <v-text-field
-            v-model="search"
-            prepend-icon="mdi-magnify"
-            label="Search"
-            single-line
-            dense
-          ></v-text-field>
-        </v-col>
-      </v-row>
       <v-data-table
         :headers="headers"
         :items="reps"

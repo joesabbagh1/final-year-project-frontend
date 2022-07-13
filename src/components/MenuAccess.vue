@@ -12,11 +12,20 @@
         flat
         class="px-10 py-0"
       ></v-select>
+      <v-text-field
+				v-model="search"
+				prepend-icon="mdi-magnify"
+				label="Search"
+				single-line
+				dense
+				class="pr-10"
+			></v-text-field>
     </v-card-title>
     <v-card-text v-if="!loading">
       <v-data-table
         :headers="headers"
         :items="nodes"
+        :search="search"
         class="elevation-1"
       >
         <template v-slot:[`item.path`]="{ item }">
@@ -34,7 +43,7 @@
             <span v-if="item.mainNodeID4">/</span>
             <span>
               {{ item.mainNodeID4 }}
-            </span>
+            </span>~
             <span v-if="item.mainNodeID5">/</span>
             <span>
               {{ item.mainNodeID5 }}
@@ -71,6 +80,7 @@ export default {
 
   data(){
     return{
+      search: '',
       selectedMenu: '',
       menuID: null,
       nodeID: '',

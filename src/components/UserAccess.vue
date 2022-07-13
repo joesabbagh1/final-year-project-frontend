@@ -4,7 +4,7 @@
       <div>
         User Access - 
         <span v-if="accessType == companies">
-          Companies
+          Companies - {{company.description}}
         </span>
         <span v-if="accessType == branch">
           Branch
@@ -13,17 +13,23 @@
           SalesRep Groups
         </span>
       </div>
-      <div v-if="accessType == companies" class="ml-16">
-        {{company.description}}
-      </div>
       <v-select 
         v-if="accessType !== companies"
         :items="accessType == branch ? titlesBranch : titlesSalesRepGroups"
         v-model="selectedTitle"
         @input="checkUsersAccess"
         class="pl-7"
+        dense
       >
       </v-select>
+      <v-text-field
+				v-model="search"
+				prepend-icon="mdi-magnify"
+				label="Search"
+				single-line
+				dense
+				class="px-10"
+			></v-text-field>
     </v-card-title>
     <v-card-text v-if="!selectedTitle && accessType !== companies">
       <div v-if="accessType == branch">
@@ -37,6 +43,7 @@
       <v-data-table
         :headers="headers"
         :items="users"
+        :search="search"
         class="elevation-1"
       >
         <template v-slot:[`item.access`]="{ item }">
@@ -69,6 +76,7 @@ export default {
   props: ['accessType'],
   data(){
     return{
+      search:'',
       companies: 'UA0000',
       branch: 'UA0006',
       salesRepGroups: 'UA0009',

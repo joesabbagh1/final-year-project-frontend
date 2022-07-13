@@ -2,6 +2,12 @@
   <div>
 		<v-container fluid class="mt-8">
 			<v-row align="center" justify="center">
+				<v-col v-if="titleSelectedContent[0] == null" align="center">
+					<v-img
+						src="https://www.evolucare.com/wp-content/uploads/2020/03/Fattal-logo.png"
+						width="600px"
+					/>	
+				</v-col>
 				<v-col cols="3" v-for="node in titleSelectedContent" :key="node.title">
 					<v-dialog
 						width="1000"
